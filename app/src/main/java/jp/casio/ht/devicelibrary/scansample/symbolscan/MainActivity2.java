@@ -7,10 +7,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import java.io.File;  // Import the File class
-import java.io.IOException;
-import jp.casio.ht.devicelibrary.ScannerLibrary;
 
+import jp.casio.ht.devicelibrary.ScannerLibrary;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -80,7 +78,6 @@ public class MainActivity2 extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     public static class ScanResultReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
             if (mScanLib != null) {
@@ -94,21 +91,4 @@ public class MainActivity2 extends AppCompatActivity {
             }
         }
     }
-
-    public class CreateFile {
-        public void main(String[] args) {
-            try {
-                File myObj = new File("filename.txt");
-                if (myObj.createNewFile()) {
-                    System.out.println("File created: " + myObj.getName());
-                } else {
-                    System.out.println("File already exists.");
-                }
-            } catch (IOException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
-        }
-    }
-
 }

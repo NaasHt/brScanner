@@ -22,13 +22,19 @@
         android:textSize="24sp"
         android:textStyle="normal|bold" />
 
-    <Space
+    <!--<Space
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="10dp" />-->
+    <Button
+        android:id="@+id/btnInv"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:text="Push"
+    />
 
-    <Space
+<!--    <Space
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="10dp" />-->
 
 </LinearLayout>
 
