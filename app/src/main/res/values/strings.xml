@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SymbolScan</string>
+    <string name="ean13">EAN13</string>
+    <string name="qr">QR</string>
+    <string name="pdf417">PDF417</string>
+    <string name="code128">CODE128</string>
+    <string name="codabar">CODABAR</string>
+</resources>
