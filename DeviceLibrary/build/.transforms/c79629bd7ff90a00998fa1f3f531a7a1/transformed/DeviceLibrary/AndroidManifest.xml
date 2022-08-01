@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="jp.casio.ht.devicelibrary"
+    android:versionCode="2"
+    android:versionName="2.0.10" >
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="26" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true" >
+        <uses-library
+            android:name="device.sdk"
+            android:required="true" />
+    </application>
+
+</manifest>
