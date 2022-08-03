@@ -30,6 +30,12 @@
         android:gravity="start"
          />
 
+    <Button
+        android:id="@+id/open_text"
+        android:layout_width="405dp"
+        android:layout_height="wrap_content"
+        android:onClick="openText"
+        android:text="Open" />
     <!--<Space
         android:layout_width="match_parent"
         android:layout_height="10dp" />-->
