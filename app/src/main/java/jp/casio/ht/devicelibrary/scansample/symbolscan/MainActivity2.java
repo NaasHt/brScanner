@@ -5,8 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
@@ -91,4 +100,35 @@ public class MainActivity2 extends AppCompatActivity {
             }
         }
     }
+
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd");
+    Date now = new Date();
+    String fileName = formatter.format(now) + ".txt";//like 2016_01_12.txt
+
+
+         try
+    {
+        File root = new File(Environment.getExternalStorageDirectory()+File.separator+"Music_Folder", "Report Files");
+        //File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+        if (!root.exists())
+        {
+            root.mkdirs();
+        }
+        File gpxfile = new File(root, fileName);
+
+
+        FileWriter writer = new FileWriter(gpxfile,true);
+        writer.append(Body+"\n\n");
+        writer.flush();
+        writer.close();
+        Toast.makeText(this, "Data has been written to Report File", Toast.LENGTH_SHORT).show();
+    }
+            catch(IOException e)
+    {
+        e.printStackTrace();
+
+    }
 }
+
+
+
