@@ -7,11 +7,13 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -100,34 +102,34 @@ public class MainActivity2 extends AppCompatActivity {
             }
         }
     }
+    public void openText(View view){
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd");
-    Date now = new Date();
-    String fileName = formatter.format(now) + ".txt";//like 2016_01_12.txt
-
-
-         try
-    {
-        File root = new File(Environment.getExternalStorageDirectory()+File.separator+"Music_Folder", "Report Files");
-        //File root = new File(Environment.getExternalStorageDirectory(), "Notes");
-        if (!root.exists())
-        {
-            root.mkdirs();
+        FileInputStream fin = null;
+        TextView textView = findViewById(R.id.text);
+        try {
+            fin = openFileInput("likuciai_ex.txt");
+            byte[] bytes = new byte[fin.available()];
+            fin.read(bytes);
+            String text = new String (bytes);
+            textView.setText(text);
         }
-        File gpxfile = new File(root, fileName);
+        catch(IOException ex) {
 
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        finally{
 
-        FileWriter writer = new FileWriter(gpxfile,true);
-        writer.append(Body+"\n\n");
-        writer.flush();
-        writer.close();
-        Toast.makeText(this, "Data has been written to Report File", Toast.LENGTH_SHORT).show();
+            try{
+                if(fin!=null)
+                    fin.close();
+            }
+            catch(IOException ex){
+
+                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
-            catch(IOException e)
-    {
-        e.printStackTrace();
 
-    }
 }
 
 
