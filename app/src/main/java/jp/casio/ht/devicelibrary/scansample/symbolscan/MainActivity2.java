@@ -1,5 +1,6 @@
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +26,8 @@ import jp.casio.ht.devicelibrary.ScannerLibrary;
 
 public class MainActivity2 extends AppCompatActivity {
 
-    private static TextView mTextView1, txtShow;
+    @SuppressLint("StaticFieldLeak")
+    private static TextView mTextView1, txtShow,txtNumber;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
@@ -101,12 +103,37 @@ public class MainActivity2 extends AppCompatActivity {
                     mTextView1.setText(new String(mScanResult.value));
                 } else {
                     mTextView1.setText("");
+                    //txtNumber.setText("");
                 }
             }
         }
     }
+
+
+
+    public void write(View view) throws IOException {
+
+        String TEXT_FILE = "C:/Users/osipo/term002.txt";
+        //File term002 = new File("C:\\Users\\osipo\\Downloads");
+        String myTxt = mTextView1.getText().toString();
+
+
+        try {
+            FileOutputStream fileOutput = openFileOutput("term002.txt", MODE_PRIVATE);
+            fileOutput.write(myTxt.getBytes());
+            fileOutput.close();
+            //txtNumber.setText("");
+            Toast.makeText(MainActivity2.this, "TEXT SAVED",Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void read(View view){
         try{
+
             FileInputStream fileInput = openFileInput("term002.txt");
             InputStreamReader reader = new InputStreamReader(fileInput);
             BufferedReader buffer = new BufferedReader(reader);
@@ -122,22 +149,37 @@ public class MainActivity2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+//
+//   public static void main(String[] args) throws IOException {
+//        String fileSeparator = System.getProperty("file.separator");
+//
+//    //absolute file name with path
+//        String absoluteFilePath = fileSeparator+"Users"+fileSeparator+"osipo"+fileSeparator+"Downloads"+fileSeparator+"term002.txt";
+//        File file = new File(absoluteFilePath);
+//            if(file.createNewFile()){
+//            System.out.println(absoluteFilePath+" File Created");
+//        }else System.out.println("File "+absoluteFilePath+" already exists");
+////
+////
+//            //file name only
+//            file = new File("term002.txt");
+//            if(file.createNewFile()){
+//                System.out.println("file.txt File Created in Project root directory");
+//            }else System.out.println("File file.txt already exists in the project root directory");
+//
+//            //relative path
+//            // String relativePath = "tmp"+fileSeparator+"file.txt";
+//            file = new File(absoluteFilePath);
+//            if(file.createNewFile()){
+//                System.out.println(absoluteFilePath+" File Created in Project root directory");
+//            }else System.out.println("File "+absoluteFilePath+" already exists in the project root directory");
+//
+//    }
 
-    public void write(View view) {
-        File term002 = new File("C:\\Users\\Liza\\Downloads");
-        String myTxt = mTextView1.getText().toString();
-        try {
-            FileOutputStream fileOutput = openFileOutput("term002.txt", MODE_PRIVATE);
-            fileOutput.write(myTxt.getBytes());
-            fileOutput.close();
-            mTextView1.setText("");
-            Toast.makeText(MainActivity2.this, "TEXT SAVED",Toast.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
+
+
+
+
 }
 
 

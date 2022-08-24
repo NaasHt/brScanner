@@ -45,7 +45,15 @@
         android:onClick="read"
         android:text="Open" />
 
-    <!--<Space
+    <EditText
+        android:id="@+id/txtNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:ems="10"
+        android:inputType="number" />
+
+    <!--paceJK
         android:layout_width="match_parent"
         android:layout_height="10dp" />-->
 
