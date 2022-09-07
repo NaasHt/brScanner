@@ -69,7 +69,6 @@
         android:layout_marginBottom="20dp"
         android:background="@android:color/darker_gray"
         android:ems="10"
-        android:hint="1"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"

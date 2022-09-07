@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button changeActivityBTN = findViewById(R.id.btnInv);
         Button changeActivityBTNSum = findViewById(R.id.btnSum);
+        Button changeActivityBTNEdit = findViewById(R.id.btnEdit);
 
 
         changeActivityBTN.setOnClickListener(new View.OnClickListener() {
@@ -29,7 +30,15 @@ public class MainActivity extends AppCompatActivity {
         changeActivityBTNSum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ChangeActivity();
 
+            }
+        });
+
+        changeActivityBTNEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeActivity();
             }
         });
 
@@ -39,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent =new Intent (this, MainActivity2.class);
         startActivity(intent);
         intent = new Intent(this, HistoryReceiver.class);
+        startActivity(intent);
+        intent = new Intent(this, MainActivity4.class);
         startActivity(intent);
     }
 
