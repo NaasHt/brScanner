@@ -16,39 +16,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button changeActivityBTN = findViewById(R.id.btnInv);
-//        Button LogIn = findViewById(R.id.btnLogin);
-//        Button Continue = findViewById(R.id.btnContin);
+        Button changeActivityBTNSum = findViewById(R.id.btnSum);
+
 
         changeActivityBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeActivity();}
+                ChangeActivity();
+            }
         });
 
-//        LogIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChangeActivity();
-//            }
-//        });
-//
-//        Continue.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChangeActivity();
-//            }
-//        });
+        changeActivityBTNSum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
     }
+
     private void ChangeActivity(){
         Intent intent =new Intent (this, MainActivity2.class);
         startActivity(intent);
+        intent = new Intent(this, HistoryReceiver.class);
+        startActivity(intent);
     }
-
-
-
-
 
 
 
