@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class MainActivity2 extends AppCompatActivity {
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
+    private Bundle savedInstanceState;
 
     private static ScannerLibrary getmScanLib() {
         if (mScanLib == null) {
@@ -52,8 +54,23 @@ public class MainActivity2 extends AppCompatActivity {
 
         mTextView1 = (TextView) findViewById(R.id.textView1);
         //txtShow= (TextView) findViewById(R.id.txtShow);
+        Button changeActivityExit = findViewById(R.id.btnExit);
+
+        changeActivityExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeActivity();
+
+            }
+        });
 
     }
+
+    private void ChangeActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onStart() {
@@ -93,6 +110,8 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResult = null;
         super.onDestroy();
     }
+
+
 
     public static class ScanResultReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
@@ -144,6 +163,11 @@ public class MainActivity2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+
+
+
 
 
 
