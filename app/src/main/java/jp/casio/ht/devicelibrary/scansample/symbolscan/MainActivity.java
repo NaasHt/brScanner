@@ -55,13 +55,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_fileopen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeActivity5();
+            }
+        });
+
 
 
 
     }
 
     private void ChangeActivity(){
-        Intent intent =new Intent (this, MainActivity4.class);
+        Intent intent =new Intent (this, MainActivity2.class);
         startActivity(intent);
 
      }
@@ -72,11 +79,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void ChangeActivity3(){
-        Intent intent = new Intent(this, MainActivity2.class);
+        Intent intent = new Intent(this, MainActivity4.class);
         startActivity(intent);
     }
     private void ChangeActivity4(){
         Intent intent = new Intent(this, MainActivity3.class);
+        startActivity(intent);
+    }
+    private void ChangeActivity5(){
+        Intent intent = new Intent(this, MainActivityLogFile.class);
         startActivity(intent);
     }
 

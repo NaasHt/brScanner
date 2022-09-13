@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.BreakIterator;
+import java.util.Scanner;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
@@ -111,6 +112,39 @@ public class MainActivity2 extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public static class FileSearch {
+
+        public void parseFile(String fileName,String searchStr) throws FileNotFoundException{
+            Scanner scan = new Scanner(new File(fileName));
+            while(scan.hasNext()){
+                String line = scan.nextLine().toLowerCase().toString();
+                if(line.contains(searchStr)){
+                    System.out.println(line);
+                }
+            }
+        }
+
+
+        public static void main(String[] args) throws FileNotFoundException{
+            FileSearch fileSearch = new FileSearch();
+            fileSearch.parseFile("res/raw/likuciai_ex.txt", "");
+        }
+
+    }
+
+//    public static class ReadFromFileUsingScanner
+//    {
+//        public static void main(String[] args) throws Exception
+//        {
+//            // pass the path to the file as a parameter
+//            File file = new File("C:\\likuciai_ex.txt");
+//            Scanner sc = new Scanner(file);
+//
+//            while (sc.hasNextLine())
+//                System.out.println(sc.nextLine());
+//        }
+//    }
+
 
 
     public static class ScanResultReceiver extends BroadcastReceiver {
@@ -121,7 +155,7 @@ public class MainActivity2 extends AppCompatActivity {
                 if (mScanResult.length > 0) {
                     mTextView1.setText(new String(mScanResult.value));
                 } else {
-                    mTextView1.setText("");
+                    mTextView1.setText("Can't find barcode");
                     //txtNumber.setText("");
                 }
             }
@@ -131,38 +165,40 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-    public void write(View view) {
-        File term002 = new File("C:\\Users\\Liza\\Downloads");
-        String myTxt = mTextView1.getText().toString();
-        try {
-            FileOutputStream fileOutput = openFileOutput("term002.txt", MODE_PRIVATE);
-            fileOutput.write(myTxt.getBytes());
-            fileOutput.close();
-            mTextView1.setText("");
-            Toast.makeText(MainActivity2.this, "TEXT SAVED",Toast.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    public void read(View view){
-        try{
-            FileInputStream fileInput = openFileInput("term002.txt");
-            InputStreamReader reader = new InputStreamReader(fileInput);
-            BufferedReader buffer = new BufferedReader(reader);
-            StringBuffer strBuffer = new StringBuffer();
-            String lines;
-            while((lines = buffer.readLine())!= null){
-                strBuffer.append(lines).append("\n");
-            }
-            txtShow.setText(strBuffer.toString());
-            fileInput.close();
-        }catch(FileNotFoundException e){e.printStackTrace();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
+
+
+//    public void write(View view) {
+//        File term002 = new File("C:\\Users\\Liza\\Downloads");
+//        String myTxt = mTextView1.getText().toString();
+//        try {
+//            FileOutputStream fileOutput = openFileOutput("term002.txt", MODE_PRIVATE);
+//            fileOutput.write(myTxt.getBytes());
+//            fileOutput.close();
+//            mTextView1.setText("");
+//            Toast.makeText(MainActivity2.this, "TEXT SAVED",Toast.LENGTH_LONG).show();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
+//    }
+//    public void read(View view){
+//        try{
+//            FileInputStream fileInput = openFileInput("term002.txt");
+//            InputStreamReader reader = new InputStreamReader(fileInput);
+//            BufferedReader buffer = new BufferedReader(reader);
+//            StringBuffer strBuffer = new StringBuffer();
+//            String lines;
+//            while((lines = buffer.readLine())!= null){
+//                strBuffer.append(lines).append("\n");
+//            }
+//            txtShow.setText(strBuffer.toString());
+//            fileInput.close();
+//        }catch(FileNotFoundException e){e.printStackTrace();
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
