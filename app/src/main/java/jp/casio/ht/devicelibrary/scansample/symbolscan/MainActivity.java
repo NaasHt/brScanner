@@ -7,11 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
+
 import javax.xml.transform.Result;
 
 public class MainActivity extends AppCompatActivity {
 
     private Bundle savedInstanceState;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
     private void ChangeActivity(){
         Intent intent =new Intent (this, MainActivity2.class);
         startActivity(intent);
+    }
 
-     }
+
 
     private void ChangeActivity2(){
 

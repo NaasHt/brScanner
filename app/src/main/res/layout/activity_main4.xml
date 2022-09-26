@@ -31,12 +31,13 @@
         app:layout_constraintVertical_bias="0.002" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/editTxtAmount"
         android:layout_width="238dp"
         android:layout_height="22dp"
         android:autofillHints=""
         android:background="@android:color/darker_gray"
         android:ems="10"
+        android:hint="1"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +51,7 @@
         android:layout_width="238dp"
         android:layout_height="22dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/editTextNumber"
+        app:layout_constraintBottom_toTopOf="@+id/editTxtAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -117,7 +118,7 @@
         app:layout_constraintVertical_bias="0.281" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="78dp"
