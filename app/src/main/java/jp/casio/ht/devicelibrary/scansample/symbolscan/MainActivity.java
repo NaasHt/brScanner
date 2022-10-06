@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
     private void ChangeActivity2(){
 
         Intent intent = new Intent(this, HistoryReceiver.class);

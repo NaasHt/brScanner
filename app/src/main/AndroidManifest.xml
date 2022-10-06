@@ -15,7 +15,7 @@
             android:name=".MainActivityLogFile"
             android:exported="false" />
         <activity
-            android:name=".MainActivity3"
+            android:name=".MainActivity4"
             android:exported="false" />
         <activity
             android:name=".HistoryReceiver"
@@ -24,11 +24,12 @@
             android:name=".MainActivity2"
             android:exported="false" />
         <activity
-            android:name=".MainActivity4"
+            android:name=".MainActivity3"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:exported="true"
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

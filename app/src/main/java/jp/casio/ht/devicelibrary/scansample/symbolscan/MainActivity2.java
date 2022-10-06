@@ -1,6 +1,6 @@
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static java.lang.System.out;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -22,13 +22,19 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Scanner;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
@@ -36,7 +42,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     //EditText mEditTxtAmount;
     Button mBtnSave;
-    String mText;
+    String mText, mText1;
     static final int READ_BLOCK_SIZE = 100;
 
     @SuppressLint("StaticFieldLeak")
@@ -48,6 +54,7 @@ public class MainActivity2 extends AppCompatActivity {
     private static final int WRITE_EXTERNAL_STORAGE_CODE =1;
 
 
+
     private static ScannerLibrary getmScanLib() {
         if (mScanLib == null) {
             mScanLib = new ScannerLibrary();
@@ -55,6 +62,7 @@ public class MainActivity2 extends AppCompatActivity {
         return mScanLib;
     }
 
+    @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +82,6 @@ public class MainActivity2 extends AppCompatActivity {
         Button saveData = findViewById(R.id.btnSave);
 
 
-
-
-
-
         changeActivityExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,16 +95,9 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mTextView1.getText().toString();
+                mText1 = mTextView1.getText().toString().trim();
                 mText = editTxtAmount.getText().toString().trim();
-//
-//            }
-//        });
-//        saveData.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
 
-                //mText = editTxtAmount.getText().toString().trim();
                 if (mText.isEmpty()) {
                     Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
 
@@ -113,10 +110,10 @@ public class MainActivity2 extends AppCompatActivity {
                             requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
 
                         } else {
-                            saveToTxtFile(mTextView1, mText);
+                            saveToTxtFile(mText1,mText);
                         }
                     } else {
-                        saveToTxtFile(mTextView1, mText);
+                        saveToTxtFile(mText1, mText);
                     }
                 }
             }
@@ -131,7 +128,7 @@ public class MainActivity2 extends AppCompatActivity {
         switch (requestCode){
             case WRITE_EXTERNAL_STORAGE_CODE:{
                 if(grantResults.length> 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    saveToTxtFile(mTextView1,mText);
+                    saveToTxtFile(mText1,mText);
                 }
                 else {
                     Toast.makeText(this, "Storage permission is required to store data", Toast.LENGTH_SHORT).show();
@@ -140,28 +137,49 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    private void saveToTxtFile(TextView mTextView1, String mText) {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
-        try{
-            File path = Environment.getExternalStorageDirectory();
-            File dir = new File(path +  "/My File/");
-            dir.mkdir();
-            String fileName = "MyFile" +timeStamp +".txt";  //until
-            File file = new File(dir, fileName);
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(mText);
-            bw.close();
+    private void saveToTxtFile(String mText1, String mText) {
 
-            Toast.makeText(getBaseContext(), "File saved successfully!",
-                    Toast.LENGTH_SHORT).show();
-        }
-        catch(Exception e){
+        String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
+        String timeStamp1 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
+        String contests = (mText1 + "   "+ mText+"  "+timeStamp1);
+        Logger fileLogger = Logger.getLogger("My File");
+        FileHandler fileHandler;
+
+        try {
+            fileHandler path = Environment.getExternalStorageDirectory();
+            fileHandler = new FileHandler(path + "/My File/");
+            fileLogger.addHandler(fileHandler);
+            String fileName = "MyFile" + timeStamp + ".log";
+            //File file = new File(dir, fileName);
+            //FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            //BufferedWriter bw = new BufferedWriter(fw);
+
+            {
+
+                fileLogger.info(contests + "\n");
+                Thread.sleep(1000);
+
+                Toast.makeText(getBaseContext(), "File saved successfully!", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+//                  bw.write(mText1 + "     " + mText + "       " + timeStamp1 + "\n");
+//
+//                    bw.close();     int String : mText,mText1,timeStamp1      for string  while
+
+            }
+
+        catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
         }
 
+
     }
+
+
+
 
 
     private void ChangeActivity() {
@@ -235,8 +253,8 @@ public class MainActivity2 extends AppCompatActivity {
                 sb.append("/n");     //line feed
             }
             fr.close();    //closes the stream and release the resources
-            System.out.println("Contents of File: ");
-            System.out.println(sb.toString());   //returns a string that textually represents the object
+            out.println("Contents of File: ");
+            out.println(sb.toString());   //returns a string that textually represents the object
         } catch (IOException e) {
             e.printStackTrace();
         }
