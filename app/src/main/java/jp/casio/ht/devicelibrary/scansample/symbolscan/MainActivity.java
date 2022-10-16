@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void ChangeActivity5(){
-        Intent intent = new Intent(this, MainActivityLogFile.class);
-        startActivity(intent);
+        startActivity(new Intent(MainActivity.this, LogFile.class));
     }
 
 

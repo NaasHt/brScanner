@@ -5,4 +5,5 @@
     <string name="pdf417">PDF417</string>
     <string name="code128">CODE128</string>
     <string name="codabar">CODABAR</string>
+    <string name="login">Login</string>
 </resources>

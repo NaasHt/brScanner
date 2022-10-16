@@ -1,6 +1,8 @@
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +12,19 @@ import java.io.IOException;
 
 public class MainActivity4 extends AppCompatActivity {
 
+    //private  ActivityM
+    //EditText mEditTxtAmount;
+    Button mBtnSave;
+    String mText, mText1;
+    static final int READ_BLOCK_SIZE = 100;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main4);
+
 
         Button changeActivitybtnEdit = findViewById(R.id.btnExit);
 
@@ -28,32 +39,30 @@ public class MainActivity4 extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+    private void init(){
 
-//    public static void main(String[] args) throws IOException {
-//
-//        String fileName = "";
-//
-//        Path file = Paths.get(fileName);
-//        BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-//        FileTime lastModifiedTime = attr.lastModifiedTime();
-//
-//        // print original last modified time
-//        System.out.println("[original] lastModifiedTime:" + lastModifiedTime);
-//
-//        LocalDate newLocalDate = LocalDate.of(1998, 9, 30);
-//        // convert LocalDate to instant, need time zone
-//        Instant instant = newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-//
-//        // convert instant to filetime
-//        // update last modified time
-//        Files.setLastModifiedTime(file, FileTime.from(instant));
-//
-//        // read last modified time again
-//        FileTime newLastModifiedTime = Files.readAttributes(file,
-//                BasicFileAttributes.class).lastModifiedTime();
-//        System.out.println("[updated] lastModifiedTime:" + newLastModifiedTime);
-//
+
+    }
+
+
+//    private static boolean isExternalStorageReadOnly() {
+//        String extStorageState = Environment.getExternalStorageState();
+//        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+//            return true;
+//        }
+//        return false;
 //    }
+//
+//
+//    private static boolean isExternalStorageAvailable() {
+//        String extStorageState = Environment.getExternalStorageState();
+//        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+//            return true;
+//        }
+//        return false;
+//    }
+
+
 
 
 
