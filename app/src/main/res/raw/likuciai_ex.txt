@@ -738,6 +738,7 @@
 4009900519823       K/G Juicy Fruit Minis Sou               1.33
 4009900526302       K/g ORBIT White Strawbere               2.69
 4009900534277       K/g Orbit Arbûzu garða                  1.69
+8016650520036       Elematic                                0.69
 4009900534307       K/g Orbit Winterfresh                   1.69
 4009900535175       K/g Juicy Fruit Apple                   0.69
 4009900535267       K/g Juicy Fruit Strawbery               0.69

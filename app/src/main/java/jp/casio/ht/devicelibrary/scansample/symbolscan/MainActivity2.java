@@ -42,21 +42,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
 public class MainActivity2 extends AppCompatActivity {
 
     //EditText mEditTxtAmount;
     Button mBtnSave;
-    String mText, mText1;
+    String mText, mText1, mName, mPrice;
+    ArrayList<String> list;
     static final int READ_BLOCK_SIZE = 100;
 
     @SuppressLint("StaticFieldLeak")
-    private static TextView mTextView1, editTxtAmount, tvNextLine, mTextView2;;
+    private static TextView mTextView1, editTxtAmount, tvNextLine, mTextView2;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
@@ -93,7 +99,7 @@ public class MainActivity2 extends AppCompatActivity {
         mTextView1 = (TextView) findViewById(R.id.textView1);
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
-        Button saveData = findViewById(R.id.btnSave);
+
 
 
         changeActivityExit.setOnClickListener(new View.OnClickListener() {
@@ -105,39 +111,38 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
 
-
-
         mBtnSave.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-
+            @Override
+            public void onClick(View v) {
                 mText1 = mTextView1.getText().toString().trim();
                 mText = editTxtAmount.getText().toString().trim();
+                mName = tvNextLine.getText().toString().trim();
+                mPrice = mTextView2.getText().toString().trim();
 
-                if (mText.isEmpty()) {
+
+                if (mText1.isEmpty()) {
                     Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
-                    if (mText1.isEmpty()) {
-                        Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
-                    }
-
+                    return;
                 } else {
-                    //if (Build.VERSION_CODES.LOLLIPOP <= Build.VERSION.SDK_INT) {
-
-                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                == PackageManager.PERMISSION_GRANTED) {
-                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-
-//                        } else {
-//                            saveToTxtFile(mText1,mText);
-//                        }
-                    } else {
-                        saveToTxtFile(mText1, mText);
+                    if (mText.isEmpty()) {
+                        Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                 }
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
+                }
+                saveToTxtFile(mText1, mText, mName, mPrice);
+                mTextView1.setText("");
+                editTxtAmount.setText("");
+                tvNextLine.setText("");
+                mTextView2.setText("");
+
             }
-
-
         });
+    }
 
 
 
@@ -145,72 +150,44 @@ public class MainActivity2 extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                saveToTxtFile(mText1, mText);
+                saveToTxtFile(mText1, mText, mName, mPrice);
             } else {
                 Toast.makeText(this, "Storage permission is required to store data", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void saveToTxtFile(String mText1, String mText) {
 
 
+    private void saveToTxtFile(String mText1, String mText, String mName, String mPrice){
         String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
         String timeStamp1 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
-        String contestsToAppend = (mText1 + "   " + mText + "  " + timeStamp1 + "\n");
+        String contestsToAppend = (mText1 + "   "+ mName + "   " + mText + "   "+ mPrice + "   " + timeStamp1 + "\n");
         try {
-            InputStream input = new FileInputStream("/My File/");
             File path = Environment.getExternalStorageDirectory();
             File dir = new File(path + "/My File/");
-            String fileName = "MyFile" + timeStamp + ".dat";
+            String fileName = "MyFile" + timeStamp + ".txt";
             File file = new File(dir, fileName);
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            {
-                bw.write(contestsToAppend);
-                bw.close();
-
-//                FileOutputStream output = new FileOutputStream(file);
-////                input.write(contestsToAppend);
-            }
-////            openOutput().close();
-
-
-
+            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(),true);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(contestsToAppend);
+            fOut.close();
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-//    private void saveToTxtFile(String mText1, String mText){
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
-//        String timeStamp1 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
-//        String contestsToAppend = (mText1 + "   " + mText + "  " + timeStamp1 + "\n");
-//        try {
-//            File path = Environment.getExternalStorageDirectory();
-//            File dir = new File(path + "/My File/");
-//            String fileName = "MyFile" + timeStamp + ".dat";
-//            File file = new File(dir, fileName);
-//            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(),true);
-//            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-//            myOutWriter.append(contestsToAppend);
-//            myOutWriter.close();
-//            fOut.close();
-//        } catch (FileNotFoundException fileNotFoundException) {
-//            fileNotFoundException.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
 
     }
 
 
-        private void ChangeActivity() {
+    private void ChangeActivity() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
 
 
     @Override
@@ -251,49 +228,95 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResult = null;
         super.onDestroy();
     }
-
-
     public class ScanResultReceiver extends BroadcastReceiver {
 
 
         public void onReceive(Context context, Intent intent) {
-//            String barcode="";
+            if (mTextView1.getText().length() > 0) {
+                Toast.makeText(MainActivity2.this, "Save are not pressed", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String barcode = "";
             if (mScanLib != null) {
                 //3. Read barcode
                 getmScanLib().getScanResult(mScanResult);
-                if (mScanResult.length > 0) {
+                if (mScanResult != null && mScanResult.length > 0) {
                     mTextView1.setText(new String(mScanResult.value));
-//                    barcode= new String(mScanResult.value);
+                    barcode = new String(mScanResult.value);
                 } else {
                     mTextView1.setText("");
                 }
             }
 
 
-//            BufferedReader reader;
-//
-//            try{
-//                final InputStream file = getResources().openRawResource(R.raw.likuciai_ex);
-//                reader = new BufferedReader(new InputStreamReader(file));
-//
-//                String line = reader.readLine();
-//
-//                while(line != null){
-//                    line = reader.readLine();
-//
-//                    if(line.contains(""))
-//                    {
-//                        String[] words = line.split("\\s{2,40}");
-//                        tvNextLine.setText(words[1]);
-//                        mTextView2.setText(words[2]);
-//                        break;
-//                    }
+            BufferedReader reader;
+
+            try {
+                final InputStream file = getResources().openRawResource(R.raw.likuciai_ex);
+//                File root = null; //directory/
+//                File file = null;
+//                for(File fileInDirectory : root.listFiles()) {
+//                    file = fileInDirectory;
 //                }
-//            } catch(IOException ioe){
-//                ioe.printStackTrace();
-//            }
-//        }
+                reader = new BufferedReader(new InputStreamReader(file));
+                String line = null;
+
+                while ((line = reader.readLine()) != null) {
+                    if (line.contains(barcode.trim())) {
+                        String[] words = line.split("\\s{2,40}");
+                        tvNextLine.setText(words[1]);
+                        mTextView2.setText(words[2]);
+                        break;
+                    }
+                }
+
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            // mTextView2.setText("1");
+        }
+
+        public void summary() {
+            File file = null; //todo get file
+            try {
+                //List<String> lines =
+                Map<String, Integer> stock =
+                        Files.readAllLines(file.toPath()).
+                                stream().
+                                map(StockRecord::new).
+                                collect(Collectors.groupingBy(StockRecord::getBarcode,
+                                        Collectors.summingInt(StockRecord::getQuantity)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
+
+
+        private static class StockRecord {
+            private final String barcode;
+            private final int quantity;
+
+            public StockRecord(String line) {
+                String[] record = line.split(";");
+                this.barcode = record[0];
+                this.quantity = Integer.parseInt(record[2]);
+            }
+
+            public String getBarcode() {
+                return barcode;
+            }
+
+            public int getQuantity() {
+                return quantity;
+            }
+        }
+
+    }
+
+
 //
 //    public static void main(String args[]) {
 //        try {
@@ -314,7 +337,7 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-    }
+
 
 
 
@@ -429,7 +452,7 @@ public class MainActivity2 extends AppCompatActivity {
 //
 //    }
 
-}
+
 
 
 
