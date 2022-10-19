@@ -105,15 +105,6 @@ public class MainActivity2 extends AppCompatActivity {
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
 
-
-//
-//        changeActivityExit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChangeActivity();
-//
-//            }
-//        });
         mBtnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,21 +288,24 @@ public class MainActivity2 extends AppCompatActivity {
                         mTextView2.setText(words[2]);
                         break;
                     }
+
+                }
+                try {
+                    if (!barcode.equals(line.contains(barcode.trim()))) {
+                        builder = new AlertDialog.Builder(MainActivity2.this);
+                        builder.setTitle("Alert")
+                                .setMessage("no brcode in file ")
+                                .setCancelable(true);
+
+
+                        builder.create().show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-              try {
-                  if (!(line.equals(line.contains(barcode.trim())))) {
-                      builder = new AlertDialog.Builder(MainActivity2.this);
-                      builder.setTitle("Alert")
-                              .setMessage("This barcode is not in file ")
-                              .setCancelable(true);
 
-
-                      builder.create().show();
-                  }
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
 
 
             } catch (IOException ioe) {

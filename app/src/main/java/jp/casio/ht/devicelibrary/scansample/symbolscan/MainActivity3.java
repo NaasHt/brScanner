@@ -41,6 +41,7 @@ import jp.casio.ht.devicelibrary.ScannerLibrary;
 public class MainActivity3 extends AppCompatActivity {
 
 
+    EditText txtLogin;
     AlertDialog.Builder builder;
     static final int READ_BLOCK_SIZE = 100;
 
@@ -68,7 +69,7 @@ public class MainActivity3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
         Button btnChangeBack = findViewById(R.id.btnBack2);
-        EditText userID = findViewById(R.id.txtLogin);
+        EditText txtLogin = findViewById(R.id.txtLogin);
 
 
         btnChangeBack.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +113,31 @@ public class MainActivity3 extends AppCompatActivity {
             }
 
             }
+        txtLogin.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                    ChangeActivity8();
+//                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                            == PackageManager.PERMISSION_GRANTED) {
+//                        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//                        requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
+//                    }
+//                    try {
+//                        File path = Environment.getExternalStorageDirectory();
+//                        File dir = new File(path + "/Downloads/");
+//                        String fileName = "MyFile" + txtLogin + ".dat";
+//                        File file = new File(dir, fileName);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+
+                }
+
+
+                return false;
+            }
+        });
 
 
 
@@ -151,70 +177,9 @@ public class MainActivity3 extends AppCompatActivity {
 
 
 
-//            public void onClick(View v) {
-//
-//                if (Build.VERSION_CODES.LOLLIPOP <= Build.VERSION.SDK_INT) {
-//
-//                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                            == PackageManager.PERMISSION_GRANTED) {
-//                        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                        requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-//
-//
-//                    }
-//                }
-//            }
-
-//    public class ScanResultReceiver extends BroadcastReceiver {
-//
-//
-//        public void onReceive(Context context, Intent intent) {
-//
-//            if (mScanLib != null) {
-//                //3. Read barcode
-//                getmScanLib().getScanResult(mScanResult);
-//                if (mScanResult.length > 0) {
-//                    mTextView1.setText(new String(mScanResult.value));
-//
-//                } else {
-//                    mTextView1.setText("");
-//                }
-//            }
-//            TextView tvNextLine = findViewById(R.id.textView8);
-//            TextView mTextView2 = findViewById(R.id.textView2);
-////            TextView barcode=(TextView) mTextView1.findViewById(R.id.textView1);
-////            barcode.setText(mTextView1);
-//
-//            BufferedReader reader;
-//
-//            try{
-//                final InputStream file = getResources().openRawResource(R.raw.likuciai_ex);
-//                reader = new BufferedReader(new InputStreamReader(file));
-//
-//                String line = reader.readLine();
-//
-//                while(line != null){
-//                    line = reader.readLine();
-//                    if(line.contains("0011210000018"))
-//                    {
-//                        String[] words = line.split("\\s{2,40}");
-//                        tvNextLine.setText(words[1]);
-//                        break;
-//                    }
-//                }
-//            } catch(IOException ioe){
-//                ioe.printStackTrace();
-//            }
-//        }
-//    }
-//
-
-
-
-
 
     private void ChangeActivity8(){
-        Intent intent =new Intent (this, MainActivity.class);
+        Intent intent =new Intent (this, MainActivity2.class);
         startActivity(intent);
     }
 }
