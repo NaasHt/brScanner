@@ -6,6 +6,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -56,9 +58,10 @@ import jp.casio.ht.devicelibrary.ScannerLibrary;
 public class MainActivity2 extends AppCompatActivity {
 
     //EditText mEditTxtAmount;
-    Button mBtnSave;
+    Button mBtnSave, mBtnExit;
     String mText, mText1, mName, mPrice;
     ArrayList<String> list;
+    AlertDialog.Builder builder;
     static final int READ_BLOCK_SIZE = 100;
 
     @SuppressLint("StaticFieldLeak")
@@ -68,6 +71,7 @@ public class MainActivity2 extends AppCompatActivity {
     private static ScanResultReceiver mScanResultReceiver;
     private Bundle savedInstanceState;
     private static final int WRITE_EXTERNAL_STORAGE_CODE =1;
+    private static final int READ_EXTERNAL_STORAGE_CODE =1;
 
 
 
@@ -85,6 +89,7 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         editTxtAmount = (EditText) findViewById(R.id.editTxtAmount);
         mBtnSave = findViewById(R.id.btnSave);
+        mBtnExit = findViewById(R.id.btnExit);
 
 
         //1. Init Scanner
@@ -101,12 +106,31 @@ public class MainActivity2 extends AppCompatActivity {
         Button changeActivityExit = findViewById(R.id.btnExit);
 
 
-
-        changeActivityExit.setOnClickListener(new View.OnClickListener() {
+//
+//        changeActivityExit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ChangeActivity();
+//
+//            }
+//        });
+        mBtnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeActivity();
+                builder = new AlertDialog.Builder(MainActivity2.this);
+                builder.setTitle("Alert")
+                        .setMessage("Are you sure to exit")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(MainActivity2.this, MainActivity.class);
+                                startActivity(i);
+                            }
+                        })
+                        .setNegativeButton("No", null);
 
+                builder.create().show();
             }
         });
 
@@ -141,7 +165,9 @@ public class MainActivity2 extends AppCompatActivity {
                 mTextView2.setText("");
 
             }
+
         });
+
     }
 
 
@@ -165,13 +191,15 @@ public class MainActivity2 extends AppCompatActivity {
         String contestsToAppend = (mText1 + "   "+ mName + "   " + mText + "   "+ mPrice + "   " + timeStamp1 + "\n");
         try {
             File path = Environment.getExternalStorageDirectory();
-            File dir = new File(path + "/My File/");
+            File dir = new File(path + "/Downloads/");
             String fileName = "MyFile" + timeStamp + ".txt";
             File file = new File(dir, fileName);
             FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(),true);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
             myOutWriter.append(contestsToAppend);
+            myOutWriter.close();
             fOut.close();
+            Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         } catch (IOException e) {
@@ -261,6 +289,7 @@ public class MainActivity2 extends AppCompatActivity {
                 reader = new BufferedReader(new InputStreamReader(file));
                 String line = null;
 
+
                 while ((line = reader.readLine()) != null) {
                     if (line.contains(barcode.trim())) {
                         String[] words = line.split("\\s{2,40}");
@@ -270,10 +299,30 @@ public class MainActivity2 extends AppCompatActivity {
                     }
                 }
 
+              try {
+                  if (!(line.equals(line.contains(barcode.trim())))) {
+                      builder = new AlertDialog.Builder(MainActivity2.this);
+                      builder.setTitle("Alert")
+                              .setMessage("This barcode is not in file ")
+                              .setCancelable(true);
+
+
+                      builder.create().show();
+                  }
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+
+
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-            // mTextView2.setText("1");
+
+        }
+        private void setSelectedText(EditText mTextView2, String text) {
+            mTextView2.setText("1");
+            mTextView2.requestFocus();
+            mTextView2.setSelection(0, mTextView2.getText().length());
         }
 
         public void summary() {
@@ -316,141 +365,6 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
-
-//
-//    public static void main(String args[]) {
-//        try {
-//            FileReader fr = new FileReader("likuciai_ex.txt");   //reads the file
-//            BufferedReader br = new BufferedReader(fr);  //creates a buffering character input stream....change
-//            StringBuffer sb = new StringBuffer();    //constructs a string buffer with no characters
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                sb.append(line);      //appends line to string buffer
-//                sb.append("/n");     //line feed
-//            }
-//            fr.close();    //closes the stream and release the resources
-//            out.println("Contents of File: ");
-//            out.println(sb.toString());   //returns a string that textually represents the object
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-
-
-
-
-
-        //File save
-
-//    public void WriteBtn(View v) {
-//        // add-write text into file
-//        try {
-//            FileOutputStream fileout=openFileOutput("mytextfile.txt", MODE_PRIVATE);
-//            OutputStreamWriter outputWriter=new OutputStreamWriter(fileout);
-//            outputWriter.write(textmsg.getText().toString());
-//            outputWriter.close();
-//            //display file saved message
-//            Toast.makeText(getBaseContext(), "File saved successfully!",
-//                    Toast.LENGTH_SHORT).show();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-
-
-    //write to fail(tam pravda fail ne sozdajotsa, tak chto dorabotaju
-
-
-
-
-//
-//    public void WriteBtn(Context context, String sFileName, String sBody) {
-//
-//        try {
-//            File root = new File(Environment.getExternalStorageDirectory(), "Note");
-//            if (!root.exists()) {
-//                root.mkdirs();
-//            }
-//            FileOutputStream fileout=openFileOutput("/Download/", MODE_PRIVATE);
-//            OutputStreamWriter outputWriter=new OutputStreamWriter(fileout);
-//            outputWriter.write(editTxtAmount.getText().toString());
-//            outputWriter.close();
-//            File gpxfile = new File(root, sFileName);
-//            FileWriter writer = new FileWriter(gpxfile);
-//            writer.append(sBody);
-//            writer.flush();
-//            writer.close();
-//            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-//
-//    public void write(View view) {
-//        File term002 = new File("C:\\Users\\Liza\\Downloads");
-//        String myTxt = mTextView1.getText().toString();
-//        try {
-//            FileOutputStream fileOutput = openFileOutput("term002.txt", MODE_PRIVATE);
-//            fileOutput.write(myTxt.getBytes());
-//            fileOutput.close();
-//            mTextView1.setText("");
-//            Toast.makeText(MainActivity2.this, "TEXT SAVED",Toast.LENGTH_LONG).show();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void read(View view){
-//        try{
-//            FileInputStream fileInput = openFileInput("term002.txt");
-//            InputStreamReader reader = new InputStreamReader(fileInput);
-//            BufferedReader buffer = new BufferedReader(reader);
-//            StringBuffer strBuffer = new StringBuffer();
-//            String lines;
-//            while((lines = buffer.readLine())!= null){
-//                strBuffer.append(lines).append("\n");
-//            }
-//            txtShow.setText(strBuffer.toString());
-//            fileInput.close();
-//        }catch(FileNotFoundException e){e.printStackTrace();
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }
-//    }
-
-//
-//   public static void main(String[] args) throws IOException {
-//        String fileSeparator = System.getProperty("file.separator");
-//
-//   //absolute file name with path
-//        String absoluteFilePath = fileSeparator+"Users"+fileSeparator+"osipo"+fileSeparator+"Downloads"+fileSeparator+"term002.txt";
-//        File file = new File(absoluteFilePath);
-//            if(file.createNewFile()){
-//            System.out.println(absoluteFilePath+" File Created");
-//        }else System.out.println("File "+absoluteFilePath+" already exists");
-//
-//
-//            //file name only
-//            file = new File("term002.txt");
-//            if(file.createNewFile()){
-//                System.out.println("file.txt File Created in Project root directory");
-//            }else System.out.println("File file.txt already exists in the project root directory");
-//
-//            //relative path
-//            // String relativePath = "tmp"+fileSeparator+"file.txt";
-//            file = new File(absoluteFilePath);
-//            if(file.createNewFile()){
-//                System.out.println(absoluteFilePath+" File Created in Project root directory");
-//            }else System.out.println("File "+absoluteFilePath+" already exists in the project root directory");
-//
-//    }
 
 
 

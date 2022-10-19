@@ -12,12 +12,19 @@ import android.graphics.Path;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Environment;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,21 +33,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Scanner;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
 public class MainActivity3 extends AppCompatActivity {
 
-    String mText, mText1;
+
+    AlertDialog.Builder builder;
     static final int READ_BLOCK_SIZE = 100;
 
     @SuppressLint("StaticFieldLeak")
-    private static TextView mTextView1, editTxtAmount;
+    private static TextView muserID;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     //private static MainActivity2.ScanResultReceiver mScanResultReceiver;
     private Bundle savedInstanceState;
+    private static final int READ_EXTERNAL_STORAGE_CODE =1;
     private static final int WRITE_EXTERNAL_STORAGE_CODE =1;
 
 
@@ -58,6 +68,7 @@ public class MainActivity3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
         Button btnChangeBack = findViewById(R.id.btnBack2);
+        EditText userID = findViewById(R.id.txtLogin);
 
 
         btnChangeBack.setOnClickListener(new View.OnClickListener() {
@@ -67,26 +78,60 @@ public class MainActivity3 extends AppCompatActivity {
 
             }
         });
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE},
+                PackageManager.PERMISSION_GRANTED);
         {
-            File path = Environment.getDataDirectory();
-            File dir = getFilesDir();
-            File file = new File( dir, path + "likuciai_ex.txt");
+            final String FILENAME="likucia_ex.txt";
+
+            StorageManager storageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+            List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
+            StorageVolume storageVolume = storageVolumes.get(0);
+            File path = Environment.getExternalStorageDirectory();
+            File dir = new File(path + "/Downloads/");
+
+            File file = new File(  path + "likuciai_ex.txt");
+//            final File file = new File(Environment.getExternalStorageDirectory()
+//                    .getAbsolutePath(), path + "likuciai_ex.txt");
 
             if (file.exists()){
-                Toast.makeText(getBaseContext(), "File exist", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity3.this, "Please enter your ID", Toast.LENGTH_SHORT).show();
+
             }
 
 
             else{
-                // Print message if it does not exists
-                Toast.makeText(getBaseContext(), "File does not exist", Toast.LENGTH_SHORT).show();
+                builder = new AlertDialog.Builder(MainActivity3.this);
+                builder.setTitle("Alert")
+                        .setMessage("There is no file. Contact with administrator! ")
+                        .setCancelable(true);
+
+
+                builder.create().show();
+            }
+
             }
 
 
 
         }
 
-    }
+
+
+    //..............create file and change activity after enter key.................................
+
+//    protected void OnClick(View v){
+//
+//        muserID.setOnEditorActionListener(new EditText(muserID).OnEditorActionListener() {
+//            public boolean onEditorAction(EditText v, int userId, KeyEvent event) {
+//                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+//                    Log.i(TAG,"Enter pressed");
+//                }
+//                return false;
+//            }
+//        });
+//    }
 
 //    public void OnClick(View v){
 //        File path = Environment.getDataDirectory();
@@ -172,13 +217,13 @@ public class MainActivity3 extends AppCompatActivity {
         Intent intent =new Intent (this, MainActivity.class);
         startActivity(intent);
     }
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
