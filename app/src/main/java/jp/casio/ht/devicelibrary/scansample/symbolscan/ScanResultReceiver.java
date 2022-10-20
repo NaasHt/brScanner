@@ -9,4 +9,5 @@ public class ScanResultReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
     }
+
 }

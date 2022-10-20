@@ -34,14 +34,13 @@
         app:layout_constraintVertical_bias="0.002" />
 
     <EditText
-        android:id="@+id/editTxtAmount"
+        android:id="@+id/editAmount"
         android:layout_width="238dp"
         android:layout_height="22dp"
         android:autofillHints=""
         android:background="@android:color/darker_gray"
         android:ems="10"
-        android:hint="1"
-        android:inputType="number"
+        android:inputType="numberSigned|number|numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
@@ -55,7 +54,7 @@
         android:layout_height="22dp"
         android:inputType="number"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/editTxtAmount"
+        app:layout_constraintBottom_toTopOf="@+id/editAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toEndOf="@+id/textView3"

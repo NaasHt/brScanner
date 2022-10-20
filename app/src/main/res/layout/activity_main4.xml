@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.002" />
 
     <EditText
-        android:id="@+id/editTxtAmount"
+        android:id="@+id/editAmount"
         android:layout_width="238dp"
         android:layout_height="22dp"
         android:autofillHints=""
@@ -51,7 +51,7 @@
         android:layout_width="238dp"
         android:layout_height="22dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/editTxtAmount"
+        app:layout_constraintBottom_toTopOf="@+id/editAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toEndOf="@+id/textView3"

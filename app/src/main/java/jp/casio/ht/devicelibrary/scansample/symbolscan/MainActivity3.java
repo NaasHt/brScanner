@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ExpandedMenuView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,9 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
@@ -41,7 +46,7 @@ import jp.casio.ht.devicelibrary.ScannerLibrary;
 public class MainActivity3 extends AppCompatActivity {
 
 
-    EditText txtLogin;
+    //EditText txtLogin;
     AlertDialog.Builder builder;
     static final int READ_BLOCK_SIZE = 100;
 
@@ -49,11 +54,10 @@ public class MainActivity3 extends AppCompatActivity {
     private static TextView muserID;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
-    //private static MainActivity2.ScanResultReceiver mScanResultReceiver;
+    private static MainActivity3.ScanResultReceiver mScanResultReceiver;
     private Bundle savedInstanceState;
-    private static final int READ_EXTERNAL_STORAGE_CODE =1;
-    private static final int WRITE_EXTERNAL_STORAGE_CODE =1;
-
+    private static final int READ_EXTERNAL_STORAGE_CODE = 1;
+    private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
 
 
     private static ScannerLibrary getmScanLib() {
@@ -63,46 +67,80 @@ public class MainActivity3 extends AppCompatActivity {
         return mScanLib;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getmScanLib().setTriggerKeyTimeout(3000);
+        getmScanLib().setOutputType(ScannerLibrary.CONSTANT.OUTPUT.USER);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("device.scanner.EVENT");
+        filter.addAction("device.common.USERMSG");
+        registerReceiver(mScanResultReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mScanResultReceiver);
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //4. Deinit Scanner
+        getmScanLib().closeScanner();
+        mScanLib = null;
+        mScanResult = null;
+        super.onDestroy();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
-        Button btnChangeBack = findViewById(R.id.btnBack2);
         EditText txtLogin = findViewById(R.id.txtLogin);
+        mScanLib = new ScannerLibrary();
+        mScanResult = new ScannerLibrary.ScanResult();
+        mScanResultReceiver = new MainActivity3.ScanResultReceiver();
+        getmScanLib().openScanner();
 
 
-        btnChangeBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangeActivity8();
-
-            }
-        });
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE},
+                        Manifest.permission.READ_EXTERNAL_STORAGE},
                 PackageManager.PERMISSION_GRANTED);
         {
-            final String FILENAME="likucia_ex.txt";
+            final String FILENAME = "likuciai_ex.txt";
+            if (!Environment.getExternalStorageState().equals(
+                    Environment.MEDIA_MOUNTED)) {
+//                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
 
-            StorageManager storageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
-            List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
-            StorageVolume storageVolume = storageVolumes.get(0);
-            File path = Environment.getExternalStorageDirectory();
-            File dir = new File(path + "/Downloads/");
-
-            File file = new File(  path + "likuciai_ex.txt");
-//            final File file = new File(Environment.getExternalStorageDirectory()
-//                    .getAbsolutePath(), path + "likuciai_ex.txt");
-
-            if (file.exists()){
-                Toast.makeText(MainActivity3.this, "Please enter your ID", Toast.LENGTH_SHORT).show();
-
+                Log.i("State", "Yes is readable!");
+                return;
             }
 
+            File sdPath = Environment.getExternalStorageDirectory();
 
-            else{
+            sdPath = new File(sdPath.getAbsolutePath() + "/Downloads/");
+            File sdFile = new File(sdPath, FILENAME);
+
+            if (sdFile.exists()) {
+                Toast.makeText(MainActivity3.this, "Please enter your ID", Toast.LENGTH_SHORT).show();
+
+            } else {
                 builder = new AlertDialog.Builder(MainActivity3.this);
                 builder.setTitle("Alert")
                         .setMessage("There is no file. Contact with administrator! ")
@@ -112,25 +150,46 @@ public class MainActivity3 extends AppCompatActivity {
                 builder.create().show();
             }
 
-            }
+        }
         txtLogin.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     ChangeActivity8();
-//                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                            == PackageManager.PERMISSION_GRANTED) {
-//                        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                        requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-//                    }
-//                    try {
-//                        File path = Environment.getExternalStorageDirectory();
-//                        File dir = new File(path + "/Downloads/");
-//                        String fileName = "MyFile" + txtLogin + ".dat";
-//                        File file = new File(dir, fileName);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
+
+                        } else {
+                            Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
+                        }
+                        try {
+
+//                            File path = Environment.getExternalStorageDirectory();
+//                            File dir = new File(path + "/Downloads");
+                            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            String fileName = "MyFile" + txtLogin.getText() + ".txt";
+                            //Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+//                            File path = Environment.getExternalStorageDirectory();
+//                            File dir = new File(path, "Downloads");
+//                            String fileName = "MyFile" + txtLogin.getText() + ".txt";
+                            File file = new File(dir, fileName);
+                            if (file.exists() || file.createNewFile()) {
+                                SessionInfo.filePath = file.getAbsolutePath();
+                                Toast.makeText(MainActivity3.this, "File created", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity3.this, "Error.File not created", Toast.LENGTH_SHORT).show();
+                            }
+//                            BufferedWriter bw = new BufferedWriter(File);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -140,48 +199,30 @@ public class MainActivity3 extends AppCompatActivity {
         });
 
 
+    }
 
+
+    public class ScanResultReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String txtLogin = "";
+            if (mScanLib != null) {
+                //3. Read barcode
+                getmScanLib().getScanResult(mScanResult);
+                if (mScanResult != null && mScanResult.length > 0) {
+                    txtLogin = new String(mScanResult.value);
+                }
+            }
         }
+    }
 
-
-
-    //..............create file and change activity after enter key.................................
-
-//    protected void OnClick(View v){
-//
-//        muserID.setOnEditorActionListener(new EditText(muserID).OnEditorActionListener() {
-//            public boolean onEditorAction(EditText v, int userId, KeyEvent event) {
-//                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-//                    Log.i(TAG,"Enter pressed");
-//                }
-//                return false;
-//            }
-//        });
-//    }
-
-//    public void OnClick(View v){
-//        File path = Environment.getDataDirectory();
-//        File file = new File(path +"worker");
-//
-//        BufferedReader = new BufferedReader(bw);
-//
-//        {
-//
-//        }
-//
-//
-//    }
-
-
-
-
-
-
-
-    private void ChangeActivity8(){
-        Intent intent =new Intent (this, MainActivity2.class);
+    private void ChangeActivity8() {
+        Intent intent = new Intent(this, MainActivity2.class);
         startActivity(intent);
     }
+
+
 }
 
 

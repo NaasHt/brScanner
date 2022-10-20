@@ -1,7 +1,5 @@
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
-import static java.lang.System.out;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -10,12 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,34 +22,16 @@ import android.widget.Toast;
 //import androidx.annotation.NonNull;
 //import androidx.appcompat.app.AppCompatActivity;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
@@ -70,9 +50,8 @@ public class MainActivity2 extends AppCompatActivity {
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
     private Bundle savedInstanceState;
-    private static final int WRITE_EXTERNAL_STORAGE_CODE =1;
-    private static final int READ_EXTERNAL_STORAGE_CODE =1;
-
+    private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
+    private static final int READ_EXTERNAL_STORAGE_CODE = 1;
 
 
     private static ScannerLibrary getmScanLib() {
@@ -87,7 +66,7 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        editTxtAmount = (EditText) findViewById(R.id.editTxtAmount);
+        editTxtAmount = (EditText) findViewById(R.id.editAmount);
         mBtnSave = findViewById(R.id.btnSave);
         mBtnExit = findViewById(R.id.btnExit);
 
@@ -149,12 +128,6 @@ public class MainActivity2 extends AppCompatActivity {
                     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
                     requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
                 }
-                saveToTxtFile(mText1, mText, mName, mPrice);
-                mTextView1.setText("");
-                editTxtAmount.setText("");
-                tvNextLine.setText("");
-                mTextView2.setText("");
-
             }
 
         });
@@ -162,12 +135,15 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 saveToTxtFile(mText1, mText, mName, mPrice);
+                mTextView1.setText("");
+                editTxtAmount.setText("");
+                tvNextLine.setText("");
+                mTextView2.setText("");
             } else {
                 Toast.makeText(this, "Storage permission is required to store data", Toast.LENGTH_SHORT).show();
             }
@@ -175,22 +151,32 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-
-    private void saveToTxtFile(String mText1, String mText, String mName, String mPrice){
-        String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
+    private void saveToTxtFile(String mText1, String mText, String mName, String mPrice) {
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
         String timeStamp1 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
-        String contestsToAppend = (mText1 + "   "+ mName + "   " + mText + "   "+ mPrice + "   " + timeStamp1 + "\n");
+        String contestsToAppend = (mText1 + "   " + mName + "   " + mText + "   " + mPrice + "   " + timeStamp1 + "\n");
+
         try {
-            File path = Environment.getExternalStorageDirectory();
-            File dir = new File(path + "/Downloads/");
-            String fileName = "MyFile" + timeStamp + ".txt";
-            File file = new File(dir, fileName);
-            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(),true);
+//            File path = Environment.getExternalStorageDirectory();
+//            File dir = new File(path + "/Downloads/");
+//            String fileName = "MyFile" + timeStamp + ".txt";
+            File file = new File(SessionInfo.filePath);
+            //FileOutputStream fOut=openFileOutput("MyFile" + ".txt", MODE_PRIVATE);
+//            File[] file = dir.listFiles(new FileFilter() {
+//
+//                @Override
+//                public boolean accept(File file) {
+//                    return file.getName().startsWith("My File");
+//                }
+//            });
+
+            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(), true);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
             myOutWriter.append(contestsToAppend);
             myOutWriter.close();
             fOut.close();
             Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
+
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         } catch (IOException e) {
@@ -206,7 +192,6 @@ public class MainActivity2 extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
 
 
     @Override
@@ -247,6 +232,9 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResult = null;
         super.onDestroy();
     }
+
+    final String FILENAME = "likuciai_ex.txt";
+
     public class ScanResultReceiver extends BroadcastReceiver {
 
 
@@ -255,6 +243,7 @@ public class MainActivity2 extends AppCompatActivity {
                 Toast.makeText(MainActivity2.this, "Save are not pressed", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             String barcode = "";
             if (mScanLib != null) {
                 //3. Read barcode
@@ -268,96 +257,151 @@ public class MainActivity2 extends AppCompatActivity {
             }
 
 
-            BufferedReader reader;
+            if (!Environment.getExternalStorageState().equals(
+                    Environment.MEDIA_MOUNTED)) {
+//                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
 
+                Log.i("State", "Yes is readable!");
+                return;
+            }
+
+            File sdPath = Environment.getExternalStorageDirectory();
+
+            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
+            File sdFile = new File(sdPath, FILENAME);
             try {
-                final InputStream file = getResources().openRawResource(R.raw.likuciai_ex);
-//                File root = null; //directory/
-//                File file = null;
-//                for(File fileInDirectory : root.listFiles()) {
-//                    file = fileInDirectory;
-//                }
-                reader = new BufferedReader(new InputStreamReader(file));
+                BufferedReader reader = new BufferedReader(new FileReader(sdFile));
+
+//                    final InputStream file = getResources().openRawResource(R.raw.likuciai_ex);
+//                    reader = new BufferedReader(new InputStreamReader(file));
+                boolean wasBound = false;
                 String line = null;
 
-
+                //try {
                 while ((line = reader.readLine()) != null) {
                     if (line.contains(barcode.trim())) {
                         String[] words = line.split("\\s{2,40}");
                         tvNextLine.setText(words[1]);
                         mTextView2.setText(words[2]);
+                        wasBound = true;
                         break;
                     }
-
                 }
-                try {
-                    if (!barcode.equals(line.contains(barcode.trim()))) {
-                        builder = new AlertDialog.Builder(MainActivity2.this);
-                        builder.setTitle("Alert")
-                                .setMessage("no brcode in file ")
-                                .setCancelable(true);
+                if (!wasBound) { //proveritj
+                    tvNextLine.setText("");
+                    mTextView2.setText("");
+                    builder = new AlertDialog.Builder(MainActivity2.this);
+                    builder.setTitle("Alert")
+                            .setMessage("no barcode in file ")
+                            .setCancelable(true);
 
 
-                        builder.create().show();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    builder.create().show();
                 }
-
-
-
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
 
+//
+//        private void setSelectedText(EditText mTextView2, String text) {
+//            mTextView2.setText("1");
+//            mTextView2.requestFocus();
+//            mTextView2.setSelection(0, mTextView2.getText().length());
+//        }
         }
-        private void setSelectedText(EditText mTextView2, String text) {
-            mTextView2.setText("1");
-            mTextView2.requestFocus();
-            mTextView2.setSelection(0, mTextView2.getText().length());
-        }
-
-        public void summary() {
-            File file = null; //todo get file
-            try {
-                //List<String> lines =
-                Map<String, Integer> stock =
-                        Files.readAllLines(file.toPath()).
-                                stream().
-                                map(StockRecord::new).
-                                collect(Collectors.groupingBy(StockRecord::getBarcode,
-                                        Collectors.summingInt(StockRecord::getQuantity)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
     }
+}
 
 
-        private static class StockRecord {
-            private final String barcode;
-            private final int quantity;
 
-            public StockRecord(String line) {
-                String[] record = line.split(";");
-                this.barcode = record[0];
-                this.quantity = Integer.parseInt(record[2]);
-            }
+//    public class ScanResultReceiver extends BroadcastReceiver {
+//
+//
+//        public void onReceive(Context context, Intent intent) {
+//            if (mTextView1.getText().length() > 0) {
+//                Toast.makeText(MainActivity2.this, "Save are not pressed", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            String barcode = "";
+//            if (mScanLib != null) {
+//                //3. Read barcode
+//                getmScanLib().getScanResult(mScanResult);
+//                if (mScanResult != null && mScanResult.length > 0) {
+//                    mTextView1.setText(new String(mScanResult.value));
+//                    barcode = new String(mScanResult.value);
+//                } else {
+//                    mTextView1.setText("");
+//                }
+//            }
+//
+//
+//            BufferedReader reader;
+//
+//            try {
+//                final InputStream file = getResources().openRawResource(R.raw.likuciai_ex);
+////                File root = null; //directory/
+////                File file = null;
+////                for(File fileInDirectory : root.listFiles()) {
+////                    file = fileInDirectory;
+////                }
+//                reader = new BufferedReader(new InputStreamReader(file));
+//                String line = null;
+//
+//
+//                while ((line = reader.readLine()) != null) {
+//                    if (line.contains(barcode.trim())) {
+//                        String[] words = line.split("\\s{2,40}");
+//                        tvNextLine.setText(words[1]);
+//                        mTextView2.setText(words[2]);
+//                        break;
+//                    }
+//
+//                }
+//
+//                }
+//
+//
+//
+//
+//            } catch (IOException ioe) {
+//                ioe.printStackTrace();
+//            }
+//
+//        }
+//        private void setSelectedText(EditText mTextView2, String text) {
+//            mTextView2.setText("1");
+//            mTextView2.requestFocus();
+//            mTextView2.setSelection(0, mTextView2.getText().length());
+//        }
 
-            public String getBarcode() {
-                return barcode;
-            }
 
-            public int getQuantity() {
-                return quantity;
-            }
-        }
 
-    }
+
+
+//        private static class StockRecord {
+//            private final String barcode;
+//            private final int quantity;
+//
+//            public StockRecord(String line) {
+//                String[] record = line.split(";");
+//                this.barcode = record[0];
+//                this.quantity = Integer.parseInt(record[2]);
+//            }
+//
+//            public String getBarcode() {
+//                return barcode;
+//            }
+//
+//            public int getQuantity() {
+//                return quantity;
+//            }
+//        }
+//
+
 
 
 
