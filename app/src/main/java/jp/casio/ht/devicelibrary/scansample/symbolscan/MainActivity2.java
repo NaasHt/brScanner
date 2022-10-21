@@ -287,7 +287,7 @@ public class MainActivity2 extends AppCompatActivity {
                         break;
                     }
                 }
-                if (!wasBound) { //proveritj
+                if (!wasBound) {
                     tvNextLine.setText("");
                     mTextView2.setText("");
                     builder = new AlertDialog.Builder(MainActivity2.this);

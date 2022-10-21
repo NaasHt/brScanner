@@ -39,7 +39,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
@@ -134,7 +136,7 @@ public class MainActivity3 extends AppCompatActivity {
 
             File sdPath = Environment.getExternalStorageDirectory();
 
-            sdPath = new File(sdPath.getAbsolutePath() + "/Downloads/");
+            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
             File sdFile = new File(sdPath, FILENAME);
 
             if (sdFile.exists()) {
@@ -142,7 +144,7 @@ public class MainActivity3 extends AppCompatActivity {
 
             } else {
                 builder = new AlertDialog.Builder(MainActivity3.this);
-                builder.setTitle("Alert")
+                builder.setTitle("Error!")
                         .setMessage("There is no file. Contact with administrator! ")
                         .setCancelable(true);
 
@@ -155,7 +157,7 @@ public class MainActivity3 extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    ChangeActivity8();
+
                     try {
                         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 == PackageManager.PERMISSION_GRANTED) {
@@ -166,38 +168,58 @@ public class MainActivity3 extends AppCompatActivity {
                             Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
                         }
                         try {
-
-//                            File path = Environment.getExternalStorageDirectory();
-//                            File dir = new File(path + "/Downloads");
+                            boolean usedAnotherUser = false;
                             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                            String fileName = "MyFile" + txtLogin.getText() + ".txt";
-                            //Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-//                            File path = Environment.getExternalStorageDirectory();
-//                            File dir = new File(path, "Downloads");
-//                            String fileName = "MyFile" + txtLogin.getText() + ".txt";
+                            String fileName = "MyFile" + txtLogin.getText() + ".dat";
                             File file = new File(dir, fileName);
-                            if (file.exists() || file.createNewFile()) {
-                                SessionInfo.filePath = file.getAbsolutePath();
-                                Toast.makeText(MainActivity3.this, "File created", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(MainActivity3.this, "Error.File not created", Toast.LENGTH_SHORT).show();
+                            if(!file.exists()) {
+                                Optional<String> result = Stream.of(dir.list()).
+                                        filter(name -> name.startsWith("MyFile") && name.endsWith(".dat")).
+                                        findAny();
+                                if(result.isPresent()) {
+                                    usedAnotherUser = true;
+                                    String anotherUser = result.get().replace("MyFile", "").replace(".dat","");
+                                    Toast.makeText(MainActivity3.this, "Error.Used by " + anotherUser, Toast.LENGTH_SHORT).show();
+                                }
                             }
-//                            BufferedWriter bw = new BufferedWriter(File);
+                            if(!usedAnotherUser) {
+                                if (file.exists() || file.createNewFile()) {
+                                    SessionInfo.filePath = file.getAbsolutePath();
+                                    Toast.makeText(MainActivity3.this, "File created", Toast.LENGTH_SHORT).show();
+                                }
+                                if(!file.exists()){
+                                    Toast.makeText(MainActivity3.this, "Error.File not created", Toast.LENGTH_SHORT).show();
+                                }
+//                            if(){
+//                                builder = new AlertDialog.Builder(MainActivity3.this);
+//                                builder.setTitle("Error!")
+//                                        .setMessage("Scanner is already taken!")
+//                                        .setCancelable(true);
+//
+//
+//                                builder.create().show();
+//                            }
 
+
+
+                                else{
+                                    ChangeActivity8();
+                                }
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
+
+
                 }
-
-
                 return false;
             }
         });
-
 
     }
 

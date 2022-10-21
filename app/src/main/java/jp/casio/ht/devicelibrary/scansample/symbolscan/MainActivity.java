@@ -1,22 +1,26 @@
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-
-import java.io.File;
-
-import javax.xml.transform.Result;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private Bundle savedInstanceState;
     AlertDialog.Builder builder;
+    @SuppressLint("StaticFieldLeak")
+
+    private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
+
 
 
     @Override
@@ -29,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         Button changeActivityBTNEdit = findViewById(R.id.btnEdit);
         Button changeActivitybtnLogout = findViewById(R.id.btnLogout);
         Button btn_fileopen = findViewById(R.id.btnLogf);
+        TextView Name = findViewById(R.id.textView19);
+
+
 
 
 
@@ -89,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        ActivityCompat.requestPermissions(this,
+                new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE},
+                PackageManager.PERMISSION_GRANTED);
+
+
+
 
     }
 
@@ -111,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 //        startActivity(intent);
 //    }
     private void ChangeActivity5(){
-        startActivity(new Intent(MainActivity.this, LogFile.class));
+        startActivity(new Intent(MainActivity.this, MainActivityLogFile.class));
     }
 
 
