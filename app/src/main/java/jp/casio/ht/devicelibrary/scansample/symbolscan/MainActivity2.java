@@ -348,10 +348,14 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if(KeyEvent.KEYCODE_F1 == keyCode) {
-            mBtnSave.callOnClick();
+            mTextView1.setText("");
+            editTxtAmount.setText("");
+            tvNextLine.setText("");
+            mTextView2.setText("");
             return true;
         } else if(KeyEvent.KEYCODE_F4 == keyCode){
             editLast();

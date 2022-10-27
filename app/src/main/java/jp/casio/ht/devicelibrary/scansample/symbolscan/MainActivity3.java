@@ -170,7 +170,7 @@ public class MainActivity3 extends AppCompatActivity {
                         try {
                             boolean usedAnotherUser = false;
                             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                            String fileName = "MyFile" + txtLogin.getText() + ".dat";
+                            String fileName = "MyFile" + txtLogin.getText() + ".txt";
                             File file = new File(dir, fileName);
                             if(!file.exists()) {
                                 Optional<String> result = Stream.of(dir.list()).

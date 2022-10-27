@@ -143,6 +143,7 @@
         android:focusableInTouchMode="true"
         android:onClick="WriteBtn"
         android:text="Save"
+        android:nextFocusUp="@id/textView1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
@@ -160,10 +161,10 @@
         android:text="Exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintHorizontal_bias="0.832"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.681"
+        app:layout_constraintVertical_bias="0.676"
         tools:ignore="MissingConstraints" />
 
     <requestFocus
