@@ -8,30 +8,28 @@
     tools:context=".MainActivity2">
 
 
+<!--    <TextView-->
+<!--        android:id="@+id/textView19"-->
+<!--        android:layout_width="183dp"-->
+<!--        android:layout_height="26dp"-->
 
+<!--        android:layout_marginStart="36dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/textView17"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="183dp"
-        android:layout_height="26dp"
-
-        android:layout_marginStart="56dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="173dp"
-        android:layout_height="wrap_content"
-        android:text="Dokumentas nosaukums"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView17"-->
+<!--        android:layout_width="173dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Dokumentas nosaukums"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.002" />-->
 
 
     <EditText
@@ -81,6 +79,7 @@
         android:layout_width="49dp"
         android:layout_height="19dp"
         android:text="Amount"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
@@ -93,6 +92,7 @@
         android:layout_width="52dp"
         android:layout_height="19dp"
         android:text="Barcode"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
@@ -105,6 +105,7 @@
         android:layout_width="0dp"
         android:layout_height="53dp"
         android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
@@ -117,6 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:text="Name"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.042"
@@ -179,6 +181,7 @@
         android:layout_height="21dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="17dp"
+        android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -1,8 +1,10 @@
+
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +29,7 @@ public class MainActivityLogFile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_logfile);
         Button ChangeActivity10 = findViewById(R.id.btnBack);
-        myTextLogFile = findViewById(R.id.textViewLogFIle);
+        myTextLogFile = findViewById(R.id.textViewLogFile);
 
         ChangeActivity10.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,25 +37,20 @@ public class MainActivityLogFile extends AppCompatActivity {
                 ChangeActivity();
             }
         });
-
+//        final String FILENAME = "term001.dat";
         try {
-            String fileName = SessionInfo.filePath;
-            File file = new File(fileName);
+//            File sdPath = Environment.getExternalStorageDirectory();
+//            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
+//            File file = new File(sdPath, FILENAME);
+            File file = SessionInfo.getDatFile();
+            //File file = new File(fileName);
             StringBuilder text = new StringBuilder();
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = null;
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split("\\s{2,40}");
-                if(data.length > 3) { //with name
-                    text.append(data[0]).append(" ").
-                            append(data[1]).append(" ").
-                            append(data[2]).append("\n").
-                            append(data[4]).append("\n");
-                } else {
-                    text.append(data[0]).append(" ").
-                            append(data[1]).append("\n").
-                            append(data[2]).append("\n");
-                }
+                StockRecord record = new StockRecord(line);
+                    text.append(record.getBarcode()).append("\t").
+                            append(record.getQuantity()).append("\n");
             }
             myTextLogFile.setText(text);
         } catch (Exception e) {

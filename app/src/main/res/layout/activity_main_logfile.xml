@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".HistoryReceiver"
+    tools:context=".MainActivityLogFile"
     tools:visibility="visible">
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="183dp"
-        android:layout_height="26dp"
-        android:layout_marginEnd="23dp"
-        android:text="Dokumentas nosaukums"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textView19"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.001" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView17"-->
+<!--        android:layout_width="183dp"-->
+<!--        android:layout_height="26dp"-->
+<!--        android:layout_marginEnd="23dp"-->
+<!--        android:text="Dokumentas nosaukums"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/textView19"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.001" />-->
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="183dp"
-        android:layout_height="26dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.001" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView19"-->
+<!--        android:layout_width="183dp"-->
+<!--        android:layout_height="26dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.001" />-->
 
     <Button
         android:id="@+id/btnBack"
@@ -43,17 +45,43 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/textViewLogFIle"
-        android:layout_width="169dp"
-        android:layout_height="309dp"
-        android:singleLine="false"
-        android:textSize="16sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+    <ScrollView
+        android:layout_width="313dp"
+        android:layout_height="302dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintVertical_bias="0.498">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textViewLogFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                android:textSize="17dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.544"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.51"
+                tools:visibility="visible"
+                />
+        </LinearLayout>
+
+
+
+        <!--            android:layout_width="303dp"-->
+        <!--            android:layout_height="340dp"-->
+    </ScrollView>
+
+
+
 
 </android.support.constraint.ConstraintLayout>

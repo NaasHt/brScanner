@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button changeActivityBTN = findViewById(R.id.btnInv);
         Button changeActivityBTNSum = findViewById(R.id.btnSum);
-        Button changeActivityBTNEdit = findViewById(R.id.btnEdit);
-        Button changeActivitybtnLogout = findViewById(R.id.btnLogout);
+        //Button changeActivityBTNEdit = findViewById(R.id.btnEdit);
+        //Button changeActivitybtnLogout = findViewById(R.id.btnLogout);
         Button btn_fileopen = findViewById(R.id.btnLogf);
         TextView Name = findViewById(R.id.textView19);
 
@@ -53,32 +53,32 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        changeActivityBTNEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangeActivity3();
-            }
-        });
-        changeActivitybtnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Alert")
-                        .setMessage("Are you sure to exit")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(MainActivity.this, MainActivity3.class);
-                                startActivity(i);
-                            }
-                        })
-                        .setNegativeButton("No", null);
-
-                builder.create().show();
-            }
-        });
+//
+//        changeActivityBTNEdit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ChangeActivity3();
+//            }
+//        });
+//        changeActivitybtnLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                builder = new AlertDialog.Builder(MainActivity.this);
+//                builder.setTitle("Alert")
+//                        .setMessage("Are you sure to exit")
+//                        .setCancelable(true)
+//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Intent i = new Intent(MainActivity.this, MainActivity3.class);
+//                                startActivity(i);
+//                            }
+//                        })
+//                        .setNegativeButton("No", null);
+//
+//                builder.create().show();
+//            }
+//        });
 
 //        changeActivitybtnLogout.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HistoryReceiver.class);
         startActivity(intent);
     }
-    private void ChangeActivity3(){
-        Intent intent = new Intent(this, MainActivity4.class);
-        startActivity(intent);
-    }
+//    private void ChangeActivity3(){
+//        Intent intent = new Intent(this, MainActivity4.class);
+//        startActivity(intent);
+//    }
 //    private void ChangeActivity4(){
 //        Intent intent = new Intent(this, MainActivity3.class);
 //        startActivity(intent);

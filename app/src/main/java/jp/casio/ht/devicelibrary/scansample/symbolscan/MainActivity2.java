@@ -13,11 +13,9 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,7 +41,11 @@ public class MainActivity2 extends AppCompatActivity {
 
     //EditText mEditTxtAmount;
     Button mBtnSave, mBtnExit;
-    String mText, mText1, mName, mPrice;
+    String mText;
+    String mText1;
+    String mName;
+    String mPrice;
+    View datName;
     ArrayList<String> list;
     AlertDialog.Builder builder;
     private long lastRecordStart = -1;
@@ -51,7 +53,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private EditText editTxtAmount;
-    private static TextView mTextView1, tvNextLine, mTextView2;
+    private static TextView mTextView1, tvNextLine, mTextView2, textView19;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
@@ -82,13 +84,14 @@ public class MainActivity2 extends AppCompatActivity {
         mBtnExit = findViewById(R.id.btnExit);
 
 
+
         //1. Init Scanner
         mScanLib = new ScannerLibrary();
         mScanResult = new ScannerLibrary.ScanResult();
         mScanResultReceiver = new ScanResultReceiver();
         getmScanLib().openScanner();
         mTextView1 = (TextView) findViewById(R.id.textView1);
-
+        datName = findViewById(R.id.textView19);
         tvNextLine = (TextView) findViewById(R.id.textName);
         mTextView2 = (TextView) findViewById(R.id.textPrice);
 
@@ -96,6 +99,8 @@ public class MainActivity2 extends AppCompatActivity {
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
 
         mBtnExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,13 +177,14 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 saveToTxtFile(mText1, mText, mName, mPrice);
                 mTextView1.setText("");
-                editTxtAmount.setText("");
+                editTxtAmount.setText("1");
                 tvNextLine.setText("");
                 mTextView2.setText("");
             }
@@ -191,12 +197,30 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-    private void saveToTxtFile(String mText1, String mText, String mName, String mPrice) {
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis());
-        String timeStamp1 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
-        String contestsToAppend = (mText1 + "   " + mName + "   " + mText + "   " + mPrice + "   " + timeStamp1 + "\n");
+    private void saveToTxtFile(String barcode, String amount, String mName, String mPrice) {
 
-        File file = new File(SessionInfo.filePath);
+        String timeStamp1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
+        String documentId = "InKL"; //todo user login
+        String documentIdContent = String.format("%-14s", documentId);
+        String barcodeContent = String.format("%-20s", barcode) ;
+        String amountContent = String.format("%14s", amount) ;
+        String contestsToAppend = (documentIdContent + "," + barcodeContent + "," + amountContent + ",,, " + timeStamp1 + "\n");
+        try {
+            File file = SessionInfo.getDatFile();
+            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(),true);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(contestsToAppend);
+            myOutWriter.close();
+            fOut.close();
+            Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
+            if (file.exists() || file.createNewFile()) {
+//                SessionInfo.filePath = file.getAbsolutePath();
+//                Toast.makeText(MainActivity2.this, "File created", Toast.LENGTH_SHORT).show();
+            }
+
+
+
+        //File file = new File(SessionInfo.filePath);
         if(lastRecordStart >= 0) {
             try(RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
                 randomAccessFile.setLength(lastRecordStart);
@@ -205,31 +229,12 @@ public class MainActivity2 extends AppCompatActivity {
             }
             lastRecordStart = -1;
         }
-        try {
-//            File path = Environment.getExternalStorageDirectory();
-//            File dir = new File(path + "/Downloads/");
-//            String fileName = "MyFile" + timeStamp + ".txt";
-            //FileOutputStream fOut=openFileOutput("MyFile" + ".txt", MODE_PRIVATE);
-//            File[] file = dir.listFiles(new FileFilter() {
-//
-//                @Override
-//                public boolean accept(File file) {
-//                    return file.getName().startsWith("My File");
-//                }
-//            });
-
-            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(), true);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(contestsToAppend);
-            myOutWriter.close();
-            fOut.close();
-            Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
-
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 
@@ -314,26 +319,7 @@ public class MainActivity2 extends AppCompatActivity {
             Log.i("State", "Yes is readable!");
             return;
         }
-
-        File sdPath = Environment.getExternalStorageDirectory();
-
-        sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
-        File sdFile = new File(sdPath, FILENAME);
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(sdFile));
-            boolean wasBound = false;
-            String line = null;
-
-            //try {
-            while ((line = reader.readLine()) != null) {
-                if (line.contains(barcode.trim())) {
-                    String[] words = line.split("\\s{2,40}");
-                    tvNextLine.setText(words[1]);
-                    mTextView2.setText(words[2]);
-                    wasBound = true;
-                    break;
-                }
-            }
+        boolean wasBound = fillByBarcode(barcode);
             if (!wasBound) {
                 tvNextLine.setText("----");
                 mTextView2.setText("----");
@@ -342,12 +328,18 @@ public class MainActivity2 extends AppCompatActivity {
                 editTxtAmount.setText("1");
                 editTxtAmount.setSelection(0, editTxtAmount.getText().length());
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
     }
 
-
+    private boolean fillByBarcode(String barcode) {
+        GoodsRecord goodsRecord = SessionInfo.getGoods(barcode);
+        if(goodsRecord != null){
+            tvNextLine.setText(goodsRecord.getName());
+            mTextView2.setText(goodsRecord.getPrice());
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -365,7 +357,8 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void editLast() {
-        try(RandomAccessFile randomAccessFile  = new RandomAccessFile(SessionInfo.filePath, "r")) {
+
+        try(RandomAccessFile randomAccessFile  = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
             long length = randomAccessFile.length() - 1;
             byte b;
             do {
@@ -378,7 +371,7 @@ public class MainActivity2 extends AppCompatActivity {
                 Toast.makeText(this, "Last is " + lastLine.split(" ")[0], Toast.LENGTH_LONG).show();
                 StockRecord lastRecord = new StockRecord(lastLine);
                 mTextView1.setText(lastRecord.getBarcode());
-                tvNextLine.setText(lastRecord.getName());
+                fillByBarcode(lastRecord.getBarcode());
                 editTxtAmount.setText(String.valueOf(lastRecord.getQuantity()));
             }
             if (length == 0) {

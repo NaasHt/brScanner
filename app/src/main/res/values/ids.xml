@@ -2,4 +2,5 @@
 <resources>
     <item name="btnInv" type="id" />
     <item name="btnLogout" type="id" />
+    <item name="textViewLogFile" type="id" />
 </resources>
