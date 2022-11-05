@@ -161,20 +161,20 @@ public class MainActivity3 extends AppCompatActivity {
                         txtLogin.getText();
 
 
-                    try {
-                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                == PackageManager.PERMISSION_GRANTED) {
-                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-
-                        } else {
-                            Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
-                        }
-                        try {
-                            //boolean usedAnotherUser = false;
-                            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                            String fileName = "term001"  + ".dat"; //+ txtLogin.getText()
-                            File file = new File(dir, fileName);
+//                    try {
+//                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                                == PackageManager.PERMISSION_GRANTED) {
+//                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
+//
+//                        } else {
+//                            Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
+//                        }
+//                        try {
+//                            //boolean usedAnotherUser = false;
+//                            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+//                            String fileName = "term001"  + ".dat"; //+ txtLogin.getText()
+//                            File file = new File(dir, fileName);
 //                            if(!file.exists()) {
 //                                Optional<String> result = Stream.of(dir.list()).
 //                                        filter(name -> name.startsWith("term") && name.endsWith(".dat")).
@@ -202,23 +202,23 @@ public class MainActivity3 extends AppCompatActivity {
 //
 //                                builder.create().show();
 //                            }
-
-
+//
+//
 //                            else {
 //                                ChangeActivity8();
 //                            }
-//                        //}
+//                        }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
                 }
                 return false;

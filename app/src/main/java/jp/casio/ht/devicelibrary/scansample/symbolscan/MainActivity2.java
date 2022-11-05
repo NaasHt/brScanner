@@ -94,7 +94,6 @@ public class MainActivity2 extends AppCompatActivity {
         datName = findViewById(R.id.textView19);
         tvNextLine = (TextView) findViewById(R.id.textName);
         mTextView2 = (TextView) findViewById(R.id.textPrice);
-
         mTextView1 = (TextView) findViewById(R.id.textView1);
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
@@ -184,7 +183,7 @@ public class MainActivity2 extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 saveToTxtFile(mText1, mText, mName, mPrice);
                 mTextView1.setText("");
-                editTxtAmount.setText("1");
+                editTxtAmount.setText("");
                 tvNextLine.setText("");
                 mTextView2.setText("");
             }
@@ -323,6 +322,9 @@ public class MainActivity2 extends AppCompatActivity {
             if (!wasBound) {
                 tvNextLine.setText("----");
                 mTextView2.setText("----");
+                mTextView1.clearFocus();
+                editTxtAmount.setText("1");
+                editTxtAmount.setSelection(0, editTxtAmount.getText().length());
             } else {
                 mTextView1.clearFocus();
                 editTxtAmount.setText("1");
