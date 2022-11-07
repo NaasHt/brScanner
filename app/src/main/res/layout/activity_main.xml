@@ -56,20 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btnSum"
         app:layout_constraintVertical_bias="0.006" />
 
-<!--    <Button-->
-<!--        android:id="@+id/btnLogout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="29dp"-->
-<!--        android:text="Log out"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.052"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/btnEdit"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
-
-<!--    <Button-->
+    <!--    <Button-->
 <!--        android:id="@+id/btnEdit"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
@@ -81,6 +68,18 @@
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/btnLogf"-->
 <!--        app:layout_constraintVertical_bias="0.029" />-->
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogf"
+        app:layout_constraintVertical_bias="0.067" />
 
     <Button
         android:id="@+id/btnSum"

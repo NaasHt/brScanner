@@ -49,12 +49,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.358" />
 
-    <EditText
+    <TextView
         android:id="@+id/txtBarcode2"
         android:layout_width="76dp"
         android:layout_height="28dp"
         android:background="@android:color/darker_gray"
-        android:inputType="number"
         android:nextFocusRight="@id/editAmount"
         android:nextFocusDown="@id/editAmount"
         android:nextFocusForward="@id/editAmount"
@@ -76,11 +75,14 @@
         android:inputType="numberSigned|number|numberDecimal"
         android:nextFocusLeft="@id/editAmount"
         android:nextFocusRight="@id/editAmount"
-        android:nextFocusUp="@id/editAmount"
+        android:nextFocusUp="@id/textView1"
         android:nextFocusDown="@id/btnSave"
         android:nextFocusForward="@id/editAmount"
         android:text="1"
         android:textIsSelectable="true"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
+        android:focusable="true"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,12 +90,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.756">
+        <requestFocus />
 
     </EditText>
 
-    <requestFocus
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="143dp" />
+
 
     <TextView
         android:id="@+id/textView4"
@@ -164,25 +165,25 @@
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
-        android:onClick="WriteBtn"
+
+        android:onClick="btnSave"
         android:text="Save"
-        android:nextFocusUp="@id/editAmount"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
         app:layout_constraintVertical_bias="0.631"
-        tools:ignore="MissingConstraints,OnClick">
+        tools:ignore="OnClick">
 
     </Button>
+<!--    android:nextFocusUp="@id/editAmount"
+android:focusableInTouchMode="true"-->
 
     <Button
         android:id="@+id/btnExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="Exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

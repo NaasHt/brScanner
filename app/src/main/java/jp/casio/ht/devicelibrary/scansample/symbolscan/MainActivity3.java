@@ -161,64 +161,67 @@ public class MainActivity3 extends AppCompatActivity {
                         txtLogin.getText();
 
 
-//                    try {
-//                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                                == PackageManager.PERMISSION_GRANTED) {
-//                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-//
-//                        } else {
-//                            Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
-//                        }
-//                        try {
-//                            //boolean usedAnotherUser = false;
-//                            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-//                            String fileName = "term001"  + ".dat"; //+ txtLogin.getText()
-//                            File file = new File(dir, fileName);
-//                            if(!file.exists()) {
-//                                Optional<String> result = Stream.of(dir.list()).
-//                                        filter(name -> name.startsWith("term") && name.endsWith(".dat")).
-//                                        findAny();
-//                                if(result.isPresent()) {
-//                                    usedAnotherUser = true;
-//                                    String anotherUser = result.get().replace("term", "").replace(".dat","");
-//                                    Toast.makeText(MainActivity3.this, "Error.Used by " + anotherUser, Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                            if(!usedAnotherUser) {
-//                            if (file.exists() || file.createNewFile()) {
-//                                SessionInfo.filePath = file.getAbsolutePath();
-//                                Toast.makeText(MainActivity3.this, "File created", Toast.LENGTH_SHORT).show();
-//                            }
-//                            if (!file.exists()) {
-//                                Toast.makeText(MainActivity3.this, "Error.File not created", Toast.LENGTH_SHORT).show();
-//                            }
-//                            if(){
-//                                builder = new AlertDialog.Builder(MainActivity3.this);
-//                                builder.setTitle("Error!")
-//                                        .setMessage("Scanner is already taken!")
-//                                        .setCancelable(true);
-//
-//
-//                                builder.create().show();
-//                            }
-//
-//
-//                            else {
-//                                ChangeActivity8();
-//                            }
-//                        }
+                    try {
+                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
+
+                        } else {
+                            Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
+                        }
+                        try {
+
+
+                            boolean usedAnotherUser = false;
+                            File file = SessionInfo.getDatFile();
+                            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            String fileName = "term001"  + ".dat"; //+ txtLogin.getText()
+                            //File file = new File(dir, fileName);
+                            if(!file.exists()) {
+                                Optional<String> result = Stream.of(dir.list()).
+                                        filter(name -> name.startsWith("term") && name.endsWith(".dat")).
+                                        findAny();
+                                if(result.isPresent()) {
+                                    usedAnotherUser = true;
+                                    String anotherUser = result.get().replace("term", "").replace(".dat","");
+                                    Toast.makeText(MainActivity3.this, "Error.Used by " + anotherUser, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            if(!usedAnotherUser) {
+                            if (file.exists() || file.createNewFile()) {
+                                SessionInfo.filePath = file.getAbsolutePath();
+                                Toast.makeText(MainActivity3.this, "File created", Toast.LENGTH_SHORT).show();
+                            }
+                            if (!file.exists()) {
+                                Toast.makeText(MainActivity3.this, "Error.File not created", Toast.LENGTH_SHORT).show();
+                            }
+                            if(usedAnotherUser){
+                                builder = new AlertDialog.Builder(MainActivity3.this);
+                                builder.setTitle("Error!")
+                                        .setMessage("Scanner is already taken!")
+                                        .setCancelable(true);
+
+
+                                builder.create().show();
+                            }
+
+
+                            else {
+                                ChangeActivity8();
+                            }
+                        }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
                 return false;

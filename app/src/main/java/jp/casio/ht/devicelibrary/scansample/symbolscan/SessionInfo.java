@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SessionInfo {
-//    public static String filePath;
+    public static String filePath;
     public static File getDatFile() {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         String fileName = "term001"+".dat";
