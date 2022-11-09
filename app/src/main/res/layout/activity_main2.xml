@@ -64,6 +64,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.369" />
 
+<!--    android:nextFocusLeft="@id/editAmount"-->
+<!--    android:nextFocusRight="@id/editAmount"-->
+<!--    android:nextFocusUp="@id/textView1"-->
+<!--    android:nextFocusDown="@id/btnSave"-->
+<!--    android:nextFocusForward="@id/editAmount"-->
+
 
     <EditText
         android:id="@+id/editAmount"
@@ -73,11 +79,7 @@
         android:background="@android:color/darker_gray"
         android:ems="10"
         android:inputType="numberSigned|number|numberDecimal"
-        android:nextFocusLeft="@id/editAmount"
-        android:nextFocusRight="@id/editAmount"
-        android:nextFocusUp="@id/textView1"
-        android:nextFocusDown="@id/btnSave"
-        android:nextFocusForward="@id/editAmount"
+
         android:text="1"
         android:textIsSelectable="true"
         android:focusableInTouchMode="true"
@@ -117,10 +119,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintVertical_bias="0.093" />
 
     <TextView
         android:id="@+id/textName"
@@ -161,39 +163,10 @@
         app:layout_constraintVertical_bias="0.281" />
 
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:onClick="btnSave"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12"
-        app:layout_constraintVertical_bias="0.631"
-        tools:ignore="OnClick">
-
-    </Button>
-<!--    android:nextFocusUp="@id/editAmount"
+    <!--    android:nextFocusUp="@id/editAmount"
 android:focusableInTouchMode="true"-->
 
-    <Button
-        android:id="@+id/btnExit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.947"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.733"
-        tools:ignore="MissingConstraints" />
-
-<!--    <requestFocus-->
+    <!--    <requestFocus-->
 <!---->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
@@ -215,18 +188,6 @@ android:focusableInTouchMode="true"-->
         app:layout_constraintTop_toBottomOf="@+id/textView9"
         app:layout_constraintVertical_bias="0.012"
         tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/textViewAmount"
-        android:layout_width="65dp"
-        android:layout_height="22dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.23"
-        app:layout_constraintStart_toEndOf="@+id/txtAmountTotal"
-        app:layout_constraintTop_toBottomOf="@+id/textPrice"
-        app:layout_constraintVertical_bias="0.248" />
 
     <TextView
         android:id="@+id/textView12"
@@ -262,16 +223,59 @@ android:focusableInTouchMode="true"-->
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btnSave"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.298" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="btnSave"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
-        app:layout_constraintVertical_bias="0.251" />
+        app:layout_constraintVertical_bias="0.666"
+        tools:ignore="OnClick">
+
+    </Button>
+
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.947"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        app:layout_constraintVertical_bias="0.763"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textViewAmount"
+        android:layout_width="65dp"
+        android:layout_height="22dp"
+        android:text="123"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintStart_toEndOf="@+id/txtAmountTotal"
+        app:layout_constraintTop_toBottomOf="@+id/textPrice"
+        app:layout_constraintVertical_bias="0.293" />
 
     <TextView
         android:id="@+id/txtLines"
         android:layout_width="24dp"
         android:layout_height="19dp"
         android:background="@android:color/darker_gray"
+        android:text="12"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"

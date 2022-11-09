@@ -22,20 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 //import androidx.annotation.NonNull;
 //import androidx.appcompat.app.AppCompatActivity;
-import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -44,7 +39,7 @@ import jp.casio.ht.devicelibrary.ScannerLibrary;
 
 public class MainActivity2 extends AppCompatActivity {
 
-    //EditText mEditTxtAmount;
+//    EditText editTxtAmount;
     Button mBtnSave, mBtnExit;
     String mText;
     String mText1;
@@ -59,7 +54,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private EditText editTxtAmount;
-    private static TextView mTextView1, tvNextLine, mTextView2, textView19, txtLines;
+    private static TextView mTextView1, tvNextLine, mTextView2, textView19, txtLines, txtAmount;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
@@ -83,17 +78,15 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         editTxtAmount = (EditText) findViewById(R.id.editAmount);
         editTxtAmount.setTextIsSelectable(true);
-        editTxtAmount.setFocusableInTouchMode(true);
+        //editTxtAmount.setFocusableInTouchMode(true);
         editTxtAmount.requestFocus();
-        editTxtAmount.setFocusedByDefault(true);
-        editTxtAmount.hasFocus();
+
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.showSoftInput(editTxtAmount, InputMethodManager.SHOW_IMPLICIT);
         mBtnSave = findViewById(R.id.btnSave);
         //mBtnSave.setFocusableInTouchMode(true);
-        mBtnSave.requestFocus();
+//        mBtnSave.requestFocus();
         mBtnExit = findViewById(R.id.btnExit);
-        txtLines = findViewById(R.id.txtLines);
-
-
 
         //1. Init Scanner
         mScanLib = new ScannerLibrary();
@@ -106,11 +99,19 @@ public class MainActivity2 extends AppCompatActivity {
         mTextView2 = (TextView) findViewById(R.id.textPrice);
         mTextView1 = (TextView) findViewById(R.id.textView1);
         SmallBarcode = (TextView) findViewById(R.id.txtBarcode2);
+        txtAmount = (TextView) findViewById(R.id.textViewAmount);
+        txtLines = (TextView) findViewById(R.id.txtLines);
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
+        editTxtAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+            }
+        });
 
         mBtnExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,8 +132,6 @@ public class MainActivity2 extends AppCompatActivity {
                 builder.create().show();
             }
         });
-
-
 
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +158,7 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
 
+
         });
 
         mTextView1.setOnKeyListener(new View.OnKeyListener() {
@@ -172,7 +172,9 @@ public class MainActivity2 extends AppCompatActivity {
                 }
                 return false;
             }
+
         });
+
 
     }
 
@@ -313,6 +315,11 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         }
+
+
+
+
+
     }
 
     private void setBarcode(String barcode) {
@@ -328,12 +335,12 @@ public class MainActivity2 extends AppCompatActivity {
             tvNextLine.setText("----");
             mTextView2.setText("----");
             mTextView1.clearFocus();
-            editTxtAmount.hasFocus();
+            editTxtAmount.requestFocus();
             editTxtAmount.setFocusedByDefault(true);
             editTxtAmount.setText("1");
             editTxtAmount.setSelection(0, editTxtAmount.getText().length());
         } else {
-            editTxtAmount.hasFocus();
+            editTxtAmount.requestFocus();
             editTxtAmount.setFocusedByDefault(true);
             mTextView1.clearFocus();
             editTxtAmount.setText("1");
@@ -394,18 +401,49 @@ public class MainActivity2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private  static long LinesNumber(String fileName){
-        Path path = Paths.get(fileName);
+
+    final String FILENAME2 = "term001.dat";
+
+    public static void countLineNumberReader() {
+        if (!Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+//                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
+
+            Log.i("State", "Yes is readable!");
+            return;
+        }
+
+        File file = new File("term001.dat");
+
         long lines = 0;
-        try{
-            lines = Files.lines(path).count();
 
+        try (LineNumberReader lnr = new LineNumberReader(new FileReader(file))) {
 
-        } catch (Exception e) {
+            while (lnr.readLine() != null) ;
+
+            lines = lnr.getLineNumber();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return lines;
+        txtLines.setText(Math.toIntExact(lines));
     }
+
+
+//    private long LinesNumber(String fileName){
+//        Path path = Paths.get(fileName);
+//        long lines = 0;
+//        try{
+//            lines = Files.lines(path).count();
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return lines;
+//    }
+
 }
 
