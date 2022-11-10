@@ -24,6 +24,7 @@ import android.widget.Toast;
 //import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -31,20 +32,26 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
 public class MainActivity2 extends AppCompatActivity {
 
-//    EditText editTxtAmount;
+    //    EditText editTxtAmount;
     Button mBtnSave, mBtnExit;
     String mText;
     String mText1;
     String mName;
-//    String mtxtLines;
+    //    String mtxtLines;
     String mPrice;
     View datName;
     ArrayList<String> list;
@@ -54,7 +61,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private EditText editTxtAmount;
-    private static TextView mTextView1, tvNextLine, mTextView2, textView19, txtLines, txtAmount;
+    private static TextView mTextView1, tvNextLine, mTextView2, textView19, txtLines, txtAmount, txtTotalAmount;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
@@ -80,12 +87,7 @@ public class MainActivity2 extends AppCompatActivity {
         editTxtAmount.setTextIsSelectable(true);
         //editTxtAmount.setFocusableInTouchMode(true);
         editTxtAmount.requestFocus();
-
-//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.showSoftInput(editTxtAmount, InputMethodManager.SHOW_IMPLICIT);
         mBtnSave = findViewById(R.id.btnSave);
-        //mBtnSave.setFocusableInTouchMode(true);
-//        mBtnSave.requestFocus();
         mBtnExit = findViewById(R.id.btnExit);
 
         //1. Init Scanner
@@ -101,6 +103,7 @@ public class MainActivity2 extends AppCompatActivity {
         SmallBarcode = (TextView) findViewById(R.id.txtBarcode2);
         txtAmount = (TextView) findViewById(R.id.textViewAmount);
         txtLines = (TextView) findViewById(R.id.txtLines);
+        txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -163,9 +166,9 @@ public class MainActivity2 extends AppCompatActivity {
 
         mTextView1.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey (View view,int keyCode, KeyEvent event){
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if(mTextView1.getText().length() >0) {
+                    if (mTextView1.getText().length() > 0) {
                         setBarcode(mTextView1.getText().toString());
                     }
                     return true;
@@ -176,9 +179,9 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
 
+
+
     }
-
-
 
 
     @Override
@@ -190,8 +193,8 @@ public class MainActivity2 extends AppCompatActivity {
                 editTxtAmount.setText("");
                 tvNextLine.setText("");
                 mTextView2.setText("");
-            }
-            else {
+                SmallBarcode.setText("");
+            } else {
                 Toast.makeText(this, "Storage permission is required to store data", Toast.LENGTH_SHORT).show();
             }
         }
@@ -199,18 +202,17 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-
     private void saveToTxtFile(String barcode, String amount, String mName, String mPrice) {
 
         String timeStamp1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
-        String documentId = "InKL"; //todo user login
+        String documentId = "InKl";//MainActivity3.txtLogin;//todo user login
         String documentIdContent = String.format("%-14s", documentId);
-        String barcodeContent = String.format("%-20s", barcode) ;
-        String amountContent = String.format("%14s", amount) ;
+        String barcodeContent = String.format("%-20s", barcode);
+        String amountContent = String.format("%14s", amount);
         String contestsToAppend = (documentIdContent + "," + barcodeContent + "," + amountContent + ",,, " + timeStamp1 + "\n");
         try {
             File file = SessionInfo.getDatFile();
-            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(),true);
+            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(), true);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
             myOutWriter.append(contestsToAppend);
             myOutWriter.close();
@@ -222,10 +224,9 @@ public class MainActivity2 extends AppCompatActivity {
             }
 
 
-
             //File file = new File(SessionInfo.filePath);
-            if(lastRecordStart >= 0) {
-                try(RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
+            if (lastRecordStart >= 0) {
+                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
                     randomAccessFile.setLength(lastRecordStart);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -240,7 +241,6 @@ public class MainActivity2 extends AppCompatActivity {
 
 
     }
-
 
 
     private void ChangeActivity() {
@@ -298,7 +298,7 @@ public class MainActivity2 extends AppCompatActivity {
                 Toast.makeText(MainActivity2.this, "Save are not pressed", Toast.LENGTH_SHORT).show();
                 return;
             }
-            String digit="";
+            String digit = "";
             String barcode = "";
             if (mScanLib != null) {
                 //3. Read barcode
@@ -307,7 +307,7 @@ public class MainActivity2 extends AppCompatActivity {
                     mTextView1.setText(new String(mScanResult.value));
                     barcode = new String(mScanResult.value);
                     setBarcode(barcode);
-                    digit = barcode.substring(barcode.length()-4);
+                    digit = barcode.substring(barcode.length() - 4);
                     SmallBarcode.setText(digit);
                 } else {
                     mTextView1.setText("");
@@ -315,11 +315,6 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         }
-
-
-
-
-
     }
 
     private void setBarcode(String barcode) {
@@ -332,8 +327,8 @@ public class MainActivity2 extends AppCompatActivity {
         }
         boolean wasBound = fillByBarcode(barcode);
         if (!wasBound) {
-            tvNextLine.setText("----");
-            mTextView2.setText("----");
+            tvNextLine.setText("------------");
+            mTextView2.setText("------------");
             mTextView1.clearFocus();
             editTxtAmount.requestFocus();
             editTxtAmount.setFocusedByDefault(true);
@@ -350,7 +345,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private boolean fillByBarcode(String barcode) {
         GoodsRecord goodsRecord = SessionInfo.getGoods(barcode);
-        if(goodsRecord != null){
+        if (goodsRecord != null) {
             tvNextLine.setText(goodsRecord.getName());
             mTextView2.setText(goodsRecord.getPrice());
             return true;
@@ -359,15 +354,51 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
+
+
+    public static void amount(String args[]) throws Exception {
+        Stream<String> lines2 =
+                Files.lines(Paths.get("term001.dat"));
+        long linesCount = lines2.count();
+        txtLines.setText((int) linesCount);
+        File file = SessionInfo.getDatFile();
+        FileInputStream fis = new FileInputStream(file);
+        byte[] byteArray = new byte[(int) file.length()];
+        fis.read(byteArray);
+        String data = new String(byteArray);
+        String[] stringArray = data.split("\r\n");
+        txtLines.setText(stringArray.length);
+    }
+
+    public static int countLines(File aFile) throws IOException {
+        LineNumberReader reader = null;
+        try {
+            reader = new LineNumberReader(new FileReader(aFile));
+            while ((reader.readLine()) != null) ;
+            return reader.getLineNumber();
+        } catch (Exception ex) {
+            return -1;
+        } finally {
+            if (reader != null)
+                reader.close();
+        }
+    }
+
+
+
+
+
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if(KeyEvent.KEYCODE_F1 == keyCode) {
+        if (KeyEvent.KEYCODE_F1 == keyCode) {
             mTextView1.setText("");
             editTxtAmount.setText("");
             tvNextLine.setText("");
             mTextView2.setText("");
+            SmallBarcode.setText("");
             return true;
-        } else if(KeyEvent.KEYCODE_F4 == keyCode){
+        } else if (KeyEvent.KEYCODE_F4 == keyCode) {
             editLast();
             return true;
         }
@@ -376,7 +407,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private void editLast() {
 
-        try(RandomAccessFile randomAccessFile  = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
             long length = randomAccessFile.length() - 1;
             byte b;
             do {
@@ -385,7 +416,7 @@ public class MainActivity2 extends AppCompatActivity {
                 b = randomAccessFile.readByte();
             } while (b != 10 && length > 0);
             String lastLine = randomAccessFile.readLine();
-            if(lastLine != null) {
+            if (lastLine != null) {
                 Toast.makeText(this, "Last is " + lastLine.split(" ")[0], Toast.LENGTH_LONG).show();
                 StockRecord lastRecord = new StockRecord(lastLine);
                 mTextView1.setText(lastRecord.getBarcode());
@@ -402,48 +433,6 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    final String FILENAME2 = "term001.dat";
-
-    public static void countLineNumberReader() {
-        if (!Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-//                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
-
-            Log.i("State", "Yes is readable!");
-            return;
-        }
-
-        File file = new File("term001.dat");
-
-        long lines = 0;
-
-        try (LineNumberReader lnr = new LineNumberReader(new FileReader(file))) {
-
-            while (lnr.readLine() != null) ;
-
-            lines = lnr.getLineNumber();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        txtLines.setText(Math.toIntExact(lines));
-    }
-
-
-//    private long LinesNumber(String fileName){
-//        Path path = Paths.get(fileName);
-//        long lines = 0;
-//        try{
-//            lines = Files.lines(path).count();
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return lines;
-//    }
 
 }
 
