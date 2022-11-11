@@ -11,8 +11,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,39 +41,45 @@ public class MainActivity extends AppCompatActivity {
         Button changeActivitybtnLogout = findViewById(R.id.btnLogout);
         Button btn_fileopen = findViewById(R.id.btnLogf);
         TextView Name = findViewById(R.id.textView19);
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE},
-                PackageManager.PERMISSION_GRANTED);
-        {
-            final String FILENAME = "likuciai_ex.txt";
-            if (!Environment.getExternalStorageState().equals(
-                    Environment.MEDIA_MOUNTED)) {
-//                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
-
-                Log.i("State", "Yes is readable!");
-                return;
-            }
-
-            File sdPath = Environment.getExternalStorageDirectory();
-
-            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
-            File sdFile = new File(sdPath, FILENAME);
-
-            if (sdFile.exists()) {
-                Toast.makeText(MainActivity.this, "File exist", Toast.LENGTH_SHORT).show();
-
-            } else {
-                builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Error!")
-                        .setMessage("There is no file. Contact with administrator! ")
-                        .setCancelable(true);
+//        LayoutInflater factory = getLayoutInflater();
+//        View enterLogin = factory.inflate(R.layout.activity_main2, null);
+//        EditText user = (EditText) enterLogin.findViewById(R.id.txtLogin);
+//        String txtLogin = user.getText().toString();
 
 
-                builder.create().show();
-            }
-
-        }
+//        ActivityCompat.requestPermissions(this,
+//                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                        Manifest.permission.READ_EXTERNAL_STORAGE},
+//                PackageManager.PERMISSION_GRANTED);
+//        {
+//            final String FILENAME = "likuciai_ex.txt";
+//            if (!Environment.getExternalStorageState().equals(
+//                    Environment.MEDIA_MOUNTED)) {
+////                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
+//
+//                Log.i("State", "Yes is readable!");
+//                return;
+//            }
+//
+//            File sdPath = Environment.getExternalStorageDirectory();
+//
+//            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
+//            File sdFile = new File(sdPath, FILENAME);
+//
+//            if (sdFile.exists()) {
+//                Toast.makeText(MainActivity.this, "File exist", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//                builder = new AlertDialog.Builder(MainActivity.this);
+//                builder.setTitle("Error!")
+//                        .setMessage("There is no file. Contact with administrator! ")
+//                        .setCancelable(true);
+//
+//
+//                builder.create().show();
+//            }
+//
+//        }
 
 
 

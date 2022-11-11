@@ -23,6 +23,8 @@ import android.widget.Toast;
 //import androidx.annotation.NonNull;
 //import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -104,8 +106,13 @@ public class MainActivity2 extends AppCompatActivity {
         txtAmount = (TextView) findViewById(R.id.textViewAmount);
         txtLines = (TextView) findViewById(R.id.txtLines);
         txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
+//        amount(toString().getBytes());
+        totalAmount();
+
+
         //txtShow= (TextView) findViewById(R.id.txtShow);
         Button changeActivityExit = findViewById(R.id.btnExit);
+
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
@@ -183,6 +190,51 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
+    private void totalAmount() {
+        File file = SessionInfo.getDatFile();
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Map<String, Integer> stock =
+                        Files.readAllLines(file.toPath()).
+                                stream().
+                                map(StockRecord::new).
+                                collect(Collectors.groupingBy(StockRecord::getBarcode,
+                                        Collectors.summingInt(StockRecord::getQuantity)));
+
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+//    public void amount(String[] args) throws IOException { //
+//        File sdPath = Environment.getExternalStorageDirectory();
+//        sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
+//        File file = new File(sdPath, "term001.dat");
+//        if(file.exists()){
+//            BufferedReader reader = new BufferedReader(new FileReader("term001.dat"));
+//            int lines = 0;
+//            while (reader.readLine() != null){
+//                lines++;
+//            }
+//            reader.close();
+////            FileReader fr = new FileReader(file);
+////            LineNumberReader lnr = new LineNumberReader(fr);
+////            int number = 0;
+////            while (lnr.readLine() != null){
+////                number++;
+////
+////            }
+//            txtLines.toString(lines);
+//
+////            lnr.close(); setText(lines);
+//        }
+//    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -211,7 +263,7 @@ public class MainActivity2 extends AppCompatActivity {
         String amountContent = String.format("%14s", amount);
         String contestsToAppend = (documentIdContent + "," + barcodeContent + "," + amountContent + ",,, " + timeStamp1 + "\n");
         try {
-            File file = SessionInfo.getDatFile();
+            File file = new File(SessionInfo.filePath);
             FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(), true);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
             myOutWriter.append(contestsToAppend);
@@ -356,33 +408,59 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-    public static void amount(String args[]) throws Exception {
-        Stream<String> lines2 =
-                Files.lines(Paths.get("term001.dat"));
-        long linesCount = lines2.count();
-        txtLines.setText((int) linesCount);
-        File file = SessionInfo.getDatFile();
-        FileInputStream fis = new FileInputStream(file);
-        byte[] byteArray = new byte[(int) file.length()];
-        fis.read(byteArray);
-        String data = new String(byteArray);
-        String[] stringArray = data.split("\r\n");
-        txtLines.setText(stringArray.length);
-    }
+//    public static void amount(String args[]) throws Exception {
+//        Stream<String> lines2 =
+//                Files.lines(Paths.get("term001.dat"));
+//        long linesCount = lines2.count();
+//        txtLines.setText((int) linesCount);
+//        File file = SessionInfo.getDatFile();
+//        FileInputStream fis = new FileInputStream(file);
+//        byte[] byteArray = new byte[(int) file.length()];
+//        fis.read(byteArray);
+//        String data = new String(byteArray);
+//        String[] stringArray = data.split("\r\n");
+//        txtLines.setText(stringArray.length);
+//    }
+//
+//    public static int countLines(File aFile) throws IOException {
+//        LineNumberReader reader = null;
+//        try {
+//            reader = new LineNumberReader(new FileReader(aFile));
+//            while ((reader.readLine()) != null) ;
+//            return reader.getLineNumber();
+//        } catch (Exception ex) {
+//            return -1;
+//        } finally {
+//            if (reader != null)
+//                reader.close();
+//        }
+//    }
 
-    public static int countLines(File aFile) throws IOException {
-        LineNumberReader reader = null;
-        try {
-            reader = new LineNumberReader(new FileReader(aFile));
-            while ((reader.readLine()) != null) ;
-            return reader.getLineNumber();
-        } catch (Exception ex) {
-            return -1;
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
-    }
+//
+//    private void amount(String[] arg0) throws IOException {
+//        File sdPath = Environment.getExternalStorageDirectory();
+//        sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
+//        File file = new File(sdPath, "term001.dat");
+//        if(file.exists()){
+//            BufferedReader reader = new BufferedReader(new FileReader("term001.dat"));
+//            int lines = 0;
+//            while (reader.readLine() != null) lines++;
+//            reader.close();
+////            FileReader fr = new FileReader(file);
+////            LineNumberReader lnr = new LineNumberReader(fr);
+////            int number = 0;
+////            while (lnr.readLine() != null){
+////                number++;
+////
+////            }
+//            txtLines.setText("1");
+//
+////            lnr.close(); setText(lines);
+//        }
+//
+//
+//
+//    }
 
 
 
@@ -433,6 +511,29 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
+//    public void summary() {
+//
+//        File file = SessionInfo.getDatFile();
+//        try {
+//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                Map<String, Integer> stock =
+//                        Files.readAllLines(file.toPath()).
+//                                stream().
+//                                map(StockRecord::new).
+//                                collect(Collectors.groupingBy(StockRecord::getBarcode,
+//                                        Collectors.summingInt(StockRecord::getQuantity)));
+//
+//                String lines = stock.entrySet().stream().
+//                        map(e -> e.getKey() + '\t' + e.getValue()).
+//                        collect(Collectors.joining("\n"));
+//                txtTotalAmount.setText(lines);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
 
 }
 

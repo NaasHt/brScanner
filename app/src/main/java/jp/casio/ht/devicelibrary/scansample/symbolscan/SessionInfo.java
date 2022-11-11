@@ -16,6 +16,7 @@ public class SessionInfo {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         String fileName = "term001"+".dat";
         return new File(path, fileName);
+
     }
 
     private static Map<String, GoodsRecord> goods = null;

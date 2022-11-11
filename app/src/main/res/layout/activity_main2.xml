@@ -274,8 +274,8 @@ android:focusableInTouchMode="true"-->
 
     <TextView
         android:id="@+id/txtLines"
-        android:layout_width="24dp"
-        android:layout_height="19dp"
+        android:layout_width="32dp"
+        android:layout_height="21dp"
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/black"
         android:textSize="16sp"

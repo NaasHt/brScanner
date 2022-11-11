@@ -158,7 +158,7 @@ public class MainActivity3 extends AppCompatActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     try{
-                        txtLogin.getText();
+                        txtLogin.getText(); //user login
 
 
                     try {
@@ -171,12 +171,15 @@ public class MainActivity3 extends AppCompatActivity {
                             Toast.makeText(MainActivity3.this, "Don't have permission", Toast.LENGTH_SHORT).show();
                         }
                         try {
+//                            String documentId = txtLogin;//MainActivity3.txtLogin;//todo user login
 
 
                             boolean usedAnotherUser = false;
                             File file = SessionInfo.getDatFile();
                             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                             String fileName = "term001"  + ".dat"; //+ txtLogin.getText()
+
+
                             //File file = new File(dir, fileName);
                             if(!file.exists()) {
                                 Optional<String> result = Stream.of(dir.list()).
@@ -247,7 +250,7 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void ChangeActivity8() {
-        Intent intent = new Intent(this, MainActivity2.class);
+        Intent intent = new Intent(this, MainActivity.class); //MainActivity2
         startActivity(intent);
     }
 
