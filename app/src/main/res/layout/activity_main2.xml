@@ -8,36 +8,6 @@
     tools:context=".MainActivity2">
 
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView19"-->
-<!--        android:layout_width="183dp"-->
-<!--        android:layout_height="26dp"-->
-
-<!--        android:layout_marginStart="36dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/textView17"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/textView17"-->
-<!--        android:layout_width="173dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Dokumentas nosaukums"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.002" />-->
-
-
-    <!--    android:nextFocusLeft="@id/editAmount"-->
-<!--    android:nextFocusRight="@id/editAmount"-->
-<!--    android:nextFocusUp="@id/textView1"-->
-<!--    android:nextFocusDown="@id/btnSave"-->
-<!--    android:nextFocusForward="@id/editAmount"-->
-
 
     <EditText
         android:id="@+id/textView1"
@@ -55,23 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.242" />
-
-    <TextView
-        android:id="@+id/txtBarcode2"
-        android:layout_width="95dp"
-        android:layout_height="49dp"
-        android:background="@android:color/darker_gray"
-        android:textColor="@android:color/black"
-        android:nextFocusRight="@id/textView1"
-        android:nextFocusDown="@id/textView1"
-        android:nextFocusForward="@id/textView1"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.3"
-        app:layout_constraintStart_toEndOf="@+id/textView1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.278" />
 
     <EditText
         android:id="@+id/editAmount"
@@ -98,6 +51,23 @@
         <requestFocus />
 
     </EditText>
+
+    <TextView
+        android:id="@+id/txtBarcode2"
+        android:layout_width="95dp"
+        android:layout_height="49dp"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:nextFocusRight="@id/textView1"
+        android:nextFocusDown="@id/textView1"
+        android:nextFocusForward="@id/textView1"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/textView1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.278" />
 
     <TextView
         android:id="@+id/textView4"

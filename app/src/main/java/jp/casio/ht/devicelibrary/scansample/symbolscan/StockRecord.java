@@ -22,6 +22,7 @@ class StockRecord {
 //        }
     }
 
+
     public String getBarcode() {
         return barcode;
     }

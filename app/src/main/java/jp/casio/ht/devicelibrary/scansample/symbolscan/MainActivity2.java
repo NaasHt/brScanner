@@ -24,7 +24,6 @@ import android.widget.Toast;
 //import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
-import java.io.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,9 +37,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,11 +102,17 @@ public class MainActivity2 extends AppCompatActivity {
         mTextView2 = (TextView) findViewById(R.id.textPrice);
         mTextView1 = (TextView) findViewById(R.id.textView1);
         SmallBarcode = (TextView) findViewById(R.id.txtBarcode2);
-        txtAmount = (TextView) findViewById(R.id.textViewAmount);
+        //txtAmount = (TextView) findViewById(R.id.textViewAmount);
         txtLines = (TextView) findViewById(R.id.txtLines);
         txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
-//        amount(toString().getBytes());
-        totalAmount();
+
+        try {
+            amount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
 
         //txtShow= (TextView) findViewById(R.id.txtShow);
@@ -116,10 +121,22 @@ public class MainActivity2 extends AppCompatActivity {
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
+        mTextView1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    Log.i("BarcodeLFocus","Focus lost");
+                } else {
+                    Log.i("BarcodeLFocus","Focus gained");
+                }
+            }
+        });
+
         editTxtAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-
+                Log.i("BarcodeLFocus","Amount Focus " + hasFocus);
             }
         });
 
@@ -190,52 +207,6 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
-    private void totalAmount() {
-        File file = SessionInfo.getDatFile();
-        try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                Map<String, Integer> stock =
-                        Files.readAllLines(file.toPath()).
-                                stream().
-                                map(StockRecord::new).
-                                collect(Collectors.groupingBy(StockRecord::getBarcode,
-                                        Collectors.summingInt(StockRecord::getQuantity)));
-
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-//    public void amount(String[] args) throws IOException { //
-//        File sdPath = Environment.getExternalStorageDirectory();
-//        sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
-//        File file = new File(sdPath, "term001.dat");
-//        if(file.exists()){
-//            BufferedReader reader = new BufferedReader(new FileReader("term001.dat"));
-//            int lines = 0;
-//            while (reader.readLine() != null){
-//                lines++;
-//            }
-//            reader.close();
-////            FileReader fr = new FileReader(file);
-////            LineNumberReader lnr = new LineNumberReader(fr);
-////            int number = 0;
-////            while (lnr.readLine() != null){
-////                number++;
-////
-////            }
-//            txtLines.toString(lines);
-//
-////            lnr.close(); setText(lines);
-//        }
-//    }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE) {
@@ -257,34 +228,31 @@ public class MainActivity2 extends AppCompatActivity {
     private void saveToTxtFile(String barcode, String amount, String mName, String mPrice) {
 
         String timeStamp1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
-        String documentId = "InKl";//MainActivity3.txtLogin;//todo user login
+        String documentId = SessionInfo.getUserName();//MainActivity3.txtLogin;//todo user login
         String documentIdContent = String.format("%-14s", documentId);
         String barcodeContent = String.format("%-20s", barcode);
         String amountContent = String.format("%14s", amount);
-        String contestsToAppend = (documentIdContent + "," + barcodeContent + "," + amountContent + ",,, " + timeStamp1 + "\n");
+        String contestsToAppend = (documentIdContent + "," + barcodeContent + "," + amountContent + ",,, " + timeStamp1);
         try {
             File file = new File(SessionInfo.filePath);
-            FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(), true);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(contestsToAppend);
-            myOutWriter.close();
-            fOut.close();
-            Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
-            if (file.exists() || file.createNewFile()) {
+//                        if (file.exists() || file.createNewFile()) {
 //                SessionInfo.filePath = file.getAbsolutePath();
 //                Toast.makeText(MainActivity2.this, "File created", Toast.LENGTH_SHORT).show();
+//            }
+//            if (lastRecordStart >= 0) {
+//                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
+//                    randomAccessFile.setLength(lastRecordStart);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                lastRecordStart = -1;
+//            }
+            try (FileOutputStream fOut = new FileOutputStream(file.getAbsoluteFile(), true);
+                 OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut)) {
+                myOutWriter.append(contestsToAppend).append("\n");
             }
-
-
-            //File file = new File(SessionInfo.filePath);
-            if (lastRecordStart >= 0) {
-                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
-                    randomAccessFile.setLength(lastRecordStart);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                lastRecordStart = -1;
-            }
+            SessionInfo.append(new StockRecord(contestsToAppend));
+            Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         } catch (IOException e) {
@@ -341,8 +309,6 @@ public class MainActivity2 extends AppCompatActivity {
         super.onDestroy();
     }
 
-    final String FILENAME = "likuciai_ex.txt";
-
     public class ScanResultReceiver extends BroadcastReceiver {
 
         public void onReceive(Context context, Intent intent) {
@@ -357,7 +323,7 @@ public class MainActivity2 extends AppCompatActivity {
                 getmScanLib().getScanResult(mScanResult);
                 if (mScanResult != null && mScanResult.length > 0) {
                     mTextView1.setText(new String(mScanResult.value));
-                    barcode = new String(mScanResult.value);
+                    barcode = new String(mScanResult.value).trim();
                     setBarcode(barcode);
                     digit = barcode.substring(barcode.length() - 4);
                     SmallBarcode.setText(digit);
@@ -372,8 +338,6 @@ public class MainActivity2 extends AppCompatActivity {
     private void setBarcode(String barcode) {
         if (!Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
-//                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
-
             Log.i("State", "Yes is readable!");
             return;
         }
@@ -393,6 +357,7 @@ public class MainActivity2 extends AppCompatActivity {
             editTxtAmount.setText("1");
             editTxtAmount.setSelection(0, editTxtAmount.getText().length());
         }
+        fillTotalAmount(barcode);
     }
 
     private boolean fillByBarcode(String barcode) {
@@ -406,21 +371,38 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-
-
-//    public static void amount(String args[]) throws Exception {
-//        Stream<String> lines2 =
-//                Files.lines(Paths.get("term001.dat"));
-//        long linesCount = lines2.count();
-//        txtLines.setText((int) linesCount);
+    private void fillTotalAmount(String barcode) {
 //        File file = SessionInfo.getDatFile();
-//        FileInputStream fis = new FileInputStream(file);
-//        byte[] byteArray = new byte[(int) file.length()];
-//        fis.read(byteArray);
-//        String data = new String(byteArray);
-//        String[] stringArray = data.split("\r\n");
-//        txtLines.setText(stringArray.length);
-//    }
+//        try {
+//            int totalAmount = Files.readAllLines(file.toPath()).
+//                    stream().
+//                    map(StockRecord::new).
+//                    filter(stockRecord -> stockRecord.getBarcode().equals(barcode)).
+//                    mapToInt(StockRecord::getQuantity).
+//                    sum();
+//            txtTotalAmount.setText(String.valueOf(totalAmount));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        txtTotalAmount.setText(String.valueOf(SessionInfo.getStockTotalAmount(barcode)));
+    }
+
+
+
+    public void amount() throws Exception {
+        File file = SessionInfo.getDatFile();
+        try (FileReader fileReader =new FileReader(file);
+                BufferedReader reader = new BufferedReader(fileReader)) {
+            int count = 0;
+            for (;;) {
+                String line = reader.readLine();
+                if (line == null)
+                    break;
+                count++;
+            }
+            txtLines.setText(String.valueOf(count));
+        }
+    }
 //
 //    public static int countLines(File aFile) throws IOException {
 //        LineNumberReader reader = null;

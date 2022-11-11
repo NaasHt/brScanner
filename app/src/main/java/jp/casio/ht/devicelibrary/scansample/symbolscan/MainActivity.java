@@ -41,11 +41,6 @@ public class MainActivity extends AppCompatActivity {
         Button changeActivitybtnLogout = findViewById(R.id.btnLogout);
         Button btn_fileopen = findViewById(R.id.btnLogf);
         TextView Name = findViewById(R.id.textView19);
-//        LayoutInflater factory = getLayoutInflater();
-//        View enterLogin = factory.inflate(R.layout.activity_main2, null);
-//        EditText user = (EditText) enterLogin.findViewById(R.id.txtLogin);
-//        String txtLogin = user.getText().toString();
-
 
 //        ActivityCompat.requestPermissions(this,
 //                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -80,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //
 //        }
-
-
-
 
 
         changeActivityBTN.setOnClickListener(new View.OnClickListener() {
@@ -126,12 +118,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        changeActivitybtnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangeActivity4();
-            }
-        });
+
 
         btn_fileopen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,18 +126,9 @@ public class MainActivity extends AppCompatActivity {
                 ChangeActivity5();
             }
         });
-
-
-
-        ActivityCompat.requestPermissions(this,
-                new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE},
-                PackageManager.PERMISSION_GRANTED);
-
-
-
-
     }
+
+
 
     private void ChangeActivity(){
         Intent intent =new Intent (this, MainActivity2.class);
@@ -162,10 +140,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HistoryReceiver.class);
         startActivity(intent);
     }
-//    private void ChangeActivity3(){
-//        Intent intent = new Intent(this, MainActivity4.class);
-//        startActivity(intent);
-//    }
+
     private void ChangeActivity4(){
         Intent intent = new Intent(this, MainActivity3.class);
         startActivity(intent);

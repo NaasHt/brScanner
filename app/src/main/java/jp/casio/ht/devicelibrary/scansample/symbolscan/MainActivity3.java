@@ -140,8 +140,8 @@ public class MainActivity3 extends AppCompatActivity {
             File sdFile = new File(sdPath, FILENAME);
 
             if (sdFile.exists()) {
+                SessionInfo.installGoods();
                 Toast.makeText(MainActivity3.this, "Please enter your ID", Toast.LENGTH_SHORT).show();
-
             } else {
                 builder = new AlertDialog.Builder(MainActivity3.this);
                 builder.setTitle("Error!")
@@ -158,9 +158,7 @@ public class MainActivity3 extends AppCompatActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     try{
-                        txtLogin.getText(); //user login
-
-
+                        SessionInfo.setUserName(txtLogin.getText().toString()); //user login
                     try {
                         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 == PackageManager.PERMISSION_GRANTED) {
