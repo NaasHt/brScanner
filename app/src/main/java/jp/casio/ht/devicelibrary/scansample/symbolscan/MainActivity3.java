@@ -248,7 +248,7 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void ChangeActivity8() {
-        Intent intent = new Intent(this, MainActivity.class); //MainActivity2
+        Intent intent = new Intent(this, MainActivity2.class);
         startActivity(intent);
     }
 

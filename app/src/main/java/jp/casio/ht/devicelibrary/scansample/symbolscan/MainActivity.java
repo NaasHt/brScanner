@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         Button btn_fileopen = findViewById(R.id.btnLogf);
         TextView Name = findViewById(R.id.textView19);
 
+        Name.setText(SessionInfo.userName);
+
 //        ActivityCompat.requestPermissions(this,
 //                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //                        Manifest.permission.READ_EXTERNAL_STORAGE},
