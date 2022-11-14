@@ -105,6 +105,8 @@ public class MainActivity2 extends AppCompatActivity {
         //txtAmount = (TextView) findViewById(R.id.textViewAmount);
         txtLines = (TextView) findViewById(R.id.txtLines);
         txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
+        TextView Name = findViewById(R.id.textView19);
+        Name.setText(SessionInfo.userName);
 
         try {
             amount();

@@ -18,7 +18,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
 
     private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
+    private static TextView txtLines;
 
 
 
@@ -41,42 +44,15 @@ public class MainActivity extends AppCompatActivity {
         Button changeActivitybtnLogout = findViewById(R.id.btnLogout);
         Button btn_fileopen = findViewById(R.id.btnLogf);
         TextView Name = findViewById(R.id.textView19);
-
+        txtLines = (TextView) findViewById(R.id.txtLines);
         Name.setText(SessionInfo.userName);
 
-//        ActivityCompat.requestPermissions(this,
-//                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                        Manifest.permission.READ_EXTERNAL_STORAGE},
-//                PackageManager.PERMISSION_GRANTED);
-//        {
-//            final String FILENAME = "likuciai_ex.txt";
-//            if (!Environment.getExternalStorageState().equals(
-//                    Environment.MEDIA_MOUNTED)) {
-////                    Toast.makeText(this, "SD CAN'T BE USED: ", Toast.LENGTH_SHORT).show();
-//
-//                Log.i("State", "Yes is readable!");
-//                return;
-//            }
-//
-//            File sdPath = Environment.getExternalStorageDirectory();
-//
-//            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
-//            File sdFile = new File(sdPath, FILENAME);
-//
-//            if (sdFile.exists()) {
-//                Toast.makeText(MainActivity.this, "File exist", Toast.LENGTH_SHORT).show();
-//
-//            } else {
-//                builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle("Error!")
-//                        .setMessage("There is no file. Contact with administrator! ")
-//                        .setCancelable(true);
-//
-//
-//                builder.create().show();
-//            }
-//
-//        }
+        try {
+            amount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 
         changeActivityBTN.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +104,20 @@ public class MainActivity extends AppCompatActivity {
                 ChangeActivity5();
             }
         });
+    }
+    public void amount() throws Exception {
+        File file = SessionInfo.getDatFile();
+        try (FileReader fileReader =new FileReader(file);
+             BufferedReader reader = new BufferedReader(fileReader)) {
+            int count = 0;
+            for (;;) {
+                String line = reader.readLine();
+                if (line == null)
+                    break;
+                count++;
+            }
+            txtLines.setText(String.valueOf(count));
+        }
     }
 
 

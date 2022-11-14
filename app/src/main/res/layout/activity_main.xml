@@ -19,14 +19,16 @@
 
     <TextView
         android:id="@+id/textView19"
-        android:layout_width="158dp"
-        android:layout_height="23dp"
+        android:layout_width="109dp"
+        android:layout_height="27dp"
 
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.427"
         app:layout_constraintStart_toEndOf="@+id/textView17"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintVertical_bias="0.001" />
 
     <TextView
         android:id="@+id/textView17"
@@ -92,6 +94,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnInv"
         app:layout_constraintVertical_bias="0.003" />
+
+    <TextView
+        android:id="@+id/txtLines"
+        android:layout_width="32dp"
+        android:layout_height="21dp"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>
