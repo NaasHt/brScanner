@@ -85,7 +85,7 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         editTxtAmount = (EditText) findViewById(R.id.editAmount);
         editTxtAmount.setTextIsSelectable(true);
-//        mBtnSave = findViewById(R.id.btnSave);
+        mBtnSave = findViewById(R.id.btnSave);
         mBtnExit = findViewById(R.id.btnExit);
 
         //1. Init Scanner
@@ -94,8 +94,8 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResultReceiver = new ScanResultReceiver();
         getmScanLib().openScanner();
         mTextView1 = (TextView) findViewById(R.id.textView1);
+        editTxtAmount.clearFocus();
         mTextView1.requestFocus();
-        // editTxtAmount.clearFocus();
 
         datName = findViewById(R.id.textView19);
         tvNextLine = (TextView) findViewById(R.id.textName);
@@ -106,6 +106,13 @@ public class MainActivity2 extends AppCompatActivity {
         txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
         TextView Name = findViewById(R.id.textView19);
         Name.setText(SessionInfo.userName);
+
+        mTextView1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+            }
+        });
 
 
         try {
@@ -141,9 +148,9 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-//        mBtnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        mBtnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                mText1 = mTextView1.getText().toString().trim();
 //                mText = editTxtAmount.getText().toString().trim();
 //                mName = tvNextLine.getText().toString().trim();
@@ -165,10 +172,10 @@ public class MainActivity2 extends AppCompatActivity {
 //                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 //                    requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
 //                }
-//            }
+            }
 //
 //
-//        });
+        });
 
         editTxtAmount.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -196,6 +203,8 @@ public class MainActivity2 extends AppCompatActivity {
                             editTxtAmount.clearFocus();
                             mTextView1.requestFocus();
                         }
+                        editTxtAmount.clearFocus();
+                        mTextView1.requestFocus();
                     }
                 }
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
@@ -328,14 +337,21 @@ public class MainActivity2 extends AppCompatActivity {
                     mTextView1.setText(new String(mScanResult.value));
                     barcode = new String(mScanResult.value).trim();
                     setBarcode(barcode);
+                    mTextView1.clearFocus();
+                    editTxtAmount.requestFocus(); //same hare
                 } else {
                     mTextView1.setText("");
                     SmallBarcode.setText("");
-                    editTxtAmount.clearFocus();
-                    mTextView1.requestFocus();
+
+                    mTextView1.clearFocus();
+                    editTxtAmount.requestFocus();//esli ubrat' to amount ne videlajetsa
+
                 }
+
             }
+
         }
+
     }
 
 

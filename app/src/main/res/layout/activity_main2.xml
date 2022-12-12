@@ -15,7 +15,6 @@
         android:layout_height="22dp"
         android:background="@android:color/darker_gray"
         android:inputType="number"
-
         android:textSize="16sp"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -31,15 +30,15 @@
 
     <EditText
         android:id="@+id/editAmount"
-        android:layout_width="81dp"
-        android:layout_height="42dp"
+        android:layout_width="104dp"
+        android:layout_height="41dp"
         android:autofillHints=""
         android:background="@android:color/darker_gray"
+        android:digits="0123456789."
         android:ems="10"
         android:focusable="true"
-        android:nextFocusUp="@id/textView1"
         android:inputType="numberSigned|number|numberDecimal"
-        android:digits="0123456789."
+        android:nextFocusUp="@id/textView1"
         android:textIsSelectable="true"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
@@ -47,8 +46,7 @@
         app:layout_constraintHorizontal_bias="0.419"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.737"
-        />
+        app:layout_constraintVertical_bias="0.737" />
 
 
 
