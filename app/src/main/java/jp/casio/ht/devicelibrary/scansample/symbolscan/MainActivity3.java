@@ -185,7 +185,7 @@ public class MainActivity3 extends AppCompatActivity {
                                         findAny();
                                 if(result.isPresent()) {
                                     usedAnotherUser = true;
-                                    String anotherUser = result.get().replace("term", "").replace(".dat","");
+                                    String anotherUser = SessionInfo.getUserName();//replace("term001", "").replace(".dat","");
                                     Toast.makeText(MainActivity3.this, "Error.Used by " + anotherUser, Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -202,10 +202,9 @@ public class MainActivity3 extends AppCompatActivity {
                                 builder.setTitle("Error!")
                                         .setMessage("Scanner is already taken!")
                                         .setCancelable(true);
-
-
                                 builder.create().show();
                             }
+                            //is empty don't change
 
 
                             else {

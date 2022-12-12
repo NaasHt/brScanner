@@ -15,16 +15,19 @@
         android:layout_height="22dp"
         android:background="@android:color/darker_gray"
         android:inputType="number"
-        android:nextFocusRight="@id/editAmount"
-        android:nextFocusDown="@id/editAmount"
-        android:nextFocusForward="@id/editAmount"
+
         android:textSize="16sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.447"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintVertical_bias="0.242">
+        <requestFocus />
+    </EditText>
 
     <EditText
         android:id="@+id/editAmount"
@@ -34,11 +37,9 @@
         android:background="@android:color/darker_gray"
         android:ems="10"
         android:focusable="true"
-
-        android:focusableInTouchMode="true"
-        android:focusedByDefault="true"
+        android:nextFocusUp="@id/textView1"
         android:inputType="numberSigned|number|numberDecimal"
-        android:text="1"
+        android:digits="0123456789."
         android:textIsSelectable="true"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
@@ -46,11 +47,19 @@
         app:layout_constraintHorizontal_bias="0.419"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.737">
+        app:layout_constraintVertical_bias="0.737"
+        />
 
-        <requestFocus />
 
-    </EditText>
+
+<!-- android:text="1"
+
+android:nextFocusRight="@id/editAmount"-->
+<!--    android:nextFocusDown="@id/editAmount"-->
+<!--    android:nextFocusForward="@id/editAmount"-->
+<!--    android:nextFocusUp="@id/editAmount"-->
+<!--    android:nextFocusLeft="@id/editAmount"
+-->
 
     <TextView
         android:id="@+id/txtBarcode2"
@@ -170,6 +179,7 @@
         android:layout_height="wrap_content"
         android:onClick="btnSave"
         android:text="Save"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"

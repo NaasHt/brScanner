@@ -37,7 +37,7 @@ public class MainActivityLogFile extends AppCompatActivity {
                 ChangeActivity();
             }
         });
-//        final String FILENAME = "term001.dat";
+
         try {
 //            File sdPath = Environment.getExternalStorageDirectory();
 //            sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
