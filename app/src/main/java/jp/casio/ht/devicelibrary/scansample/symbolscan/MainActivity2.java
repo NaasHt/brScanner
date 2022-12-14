@@ -378,7 +378,7 @@ public class MainActivity2 extends AppCompatActivity {
         boolean wasBound = fillByBarcode(barcode);
         if (wasBound) {
             fillDefaultQuantity("1");
-            try {           //декодировка
+            try {           //декодировкап
                 byte[] data = Base64.decode(String.valueOf(tvNextLine),  Base64.DEFAULT);
                 URLDecoder.decode(String.valueOf(tvNextLine),"UTF-8");
             } catch (UnsupportedEncodingException e) {
