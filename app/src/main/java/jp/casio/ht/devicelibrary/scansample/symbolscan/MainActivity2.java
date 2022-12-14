@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +36,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,7 +97,7 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResultReceiver = new ScanResultReceiver();
         getmScanLib().openScanner();
         mTextView1 = (TextView) findViewById(R.id.textView1);
-        editTxtAmount.clearFocus();
+//        editTxtAmount.clearFocus();
         mTextView1.requestFocus();
 
         datName = findViewById(R.id.textView19);
@@ -120,6 +123,8 @@ public class MainActivity2 extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
 
 
         //txtShow= (TextView) findViewById(R.id.txtShow);
@@ -187,6 +192,8 @@ public class MainActivity2 extends AppCompatActivity {
                     mPrice = mTextView2.getText().toString().trim();
 
 
+
+
                     if (mText1.isEmpty()) {
                         //Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
                         mBtnExit.requestFocus();
@@ -228,6 +235,7 @@ public class MainActivity2 extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
 
@@ -329,6 +337,7 @@ public class MainActivity2 extends AppCompatActivity {
                 Toast.makeText(MainActivity2.this, "Save are not pressed", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             String barcode = "";
             if (mScanLib != null) {
                 //3. Read barcode
@@ -339,6 +348,7 @@ public class MainActivity2 extends AppCompatActivity {
                     setBarcode(barcode);
                     mTextView1.clearFocus();
                     editTxtAmount.requestFocus(); //same hare
+
                 } else {
                     mTextView1.setText("");
                     SmallBarcode.setText("");
@@ -355,7 +365,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-    private void setBarcode(String barcode) {
+    private void setBarcode(String barcode) {           //dobavitj zvuk
         if (!Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
             Log.i("State", "Yes is readable!");
@@ -364,12 +374,22 @@ public class MainActivity2 extends AppCompatActivity {
         if(barcode.length()>=4) {
             SmallBarcode.setText(barcode.substring(barcode.length() - 4));
         }
+
         boolean wasBound = fillByBarcode(barcode);
         if (wasBound) {
             fillDefaultQuantity("1");
+            try {           //декодировка
+                byte[] data = Base64.decode(String.valueOf(tvNextLine),  Base64.DEFAULT);
+                URLDecoder.decode(String.valueOf(tvNextLine),"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            fillTotalAmount(barcode);
         } else {
             tvNextLine.setText("------------");
             mTextView2.setText("------------");
+            final MediaPlayer noName = MediaPlayer.create(this, R.raw.scansuccess2);
+            noName.start();
             if (barcode.startsWith("23")) {
                 double weight = Integer.parseInt(barcode.substring(8, 12)) / 1000.0;
                 fillDefaultQuantity((String.valueOf(weight)));
@@ -392,6 +412,8 @@ public class MainActivity2 extends AppCompatActivity {
         mTextView1.requestFocus();
         editTxtAmount.clearFocus();
     }
+
+
 
     private boolean fillByBarcode(String barcode) {
         GoodsRecord goodsRecord = SessionInfo.getGoods(barcode);
