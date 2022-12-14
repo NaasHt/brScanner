@@ -9,6 +9,7 @@
 
 
 
+
     <EditText
         android:id="@+id/textView1"
         android:layout_width="127dp"
@@ -32,12 +33,11 @@
         android:id="@+id/editAmount"
         android:layout_width="104dp"
         android:layout_height="41dp"
-        android:autofillHints=""
         android:background="@android:color/darker_gray"
         android:digits="0123456789.-"
         android:ems="10"
         android:inputType="numberSigned|number|numberDecimal"
-        android:nextFocusUp="@id/textView1"
+        android:focusedByDefault="false"
         android:textIsSelectable="true"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
