@@ -5,8 +5,12 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +55,8 @@ public class SessionInfo {
         sdPath = new File(sdPath.getAbsolutePath() + "/Download/");
         File sdFile = new File(sdPath, "likuciai_ex.txt");
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(sdFile));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sdFile), Charset.forName("cp1252")));
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sdFile), StandardCharsets.UTF_8));
             String line = null;
             //try {
             while ((line = reader.readLine()) != null) {

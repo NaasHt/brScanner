@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/assets/likuciai_ex.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/jp/casio/ht/devicelibrary/scansample/symbolscan/MainActivity2.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/raw/likuciai_ex.txt" charset="windows-1252" />
   </component>
 </project>

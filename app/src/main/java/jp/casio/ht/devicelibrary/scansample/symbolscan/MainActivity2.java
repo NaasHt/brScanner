@@ -9,14 +9,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,15 +33,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
 
@@ -61,8 +53,8 @@ public class MainActivity2 extends AppCompatActivity {
     static final int READ_BLOCK_SIZE = 100;
 
     @SuppressLint("StaticFieldLeak")
-    private EditText editTxtAmount;
-    private static TextView mTextView1, tvNextLine, mTextView2, textView19, txtLines, txtAmount, txtTotalAmount;
+    private EditText mTextView1, editTxtAmount;
+    private static TextView tvNextLine, mTextView2, textView19, txtLines, txtAmount, txtTotalAmount;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
@@ -83,7 +75,8 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        editTxtAmount = (EditText) findViewById(R.id.editAmount);
+        mTextView1 = findViewById(R.id.textView1);
+        editTxtAmount = findViewById(R.id.editAmount);
         editTxtAmount.setTextIsSelectable(true);
         mBtnSave = findViewById(R.id.btnSave);
         mBtnExit = findViewById(R.id.btnExit);
@@ -91,8 +84,6 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResult = new ScannerLibrary.ScanResult();
         mScanResultReceiver = new ScanResultReceiver();
         getmScanLib().openScanner();
-        mTextView1 = (TextView) findViewById(R.id.textView1);
-//        mTextView1.requestFocus();
         datName = findViewById(R.id.textView19);
         tvNextLine = (TextView) findViewById(R.id.textName);
         mTextView2 = (TextView) findViewById(R.id.textPrice);
@@ -102,14 +93,7 @@ public class MainActivity2 extends AppCompatActivity {
         txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
         TextView Name = findViewById(R.id.textView19);
         Name.setText(SessionInfo.userName);
-
-//        mTextView1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//
-//            }
-//        });
-
+        requestFocusToBarcode();
         try {
             amount();
         } catch (Exception e) {
@@ -137,6 +121,7 @@ public class MainActivity2 extends AppCompatActivity {
                 builder.create().show();
             }
         });
+
 
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,26 +155,17 @@ public class MainActivity2 extends AppCompatActivity {
                     mText = editTxtAmount.getText().toString().trim();
                     mName = tvNextLine.getText().toString().trim();
                     mPrice = mTextView2.getText().toString().trim();
-
-                    if (mText1.isEmpty()) {
-                        mBtnExit.requestFocus();
-                    }
                     if (mText.isEmpty()) {
-                        mBtnExit.requestFocus();
+                        new Handler().post(mBtnExit::requestFocus);
                     } else {
                         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 == PackageManager.PERMISSION_GRANTED) {
                             String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
                             requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-
                         }
-                        editTxtAmount.clearFocus();
-                        mTextView1.requestFocus();
                     }
-
-                }
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                    mTextView1.requestFocus();
+                } else if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                    requestFocusToBarcode();
                 }
                 return false;
             }
@@ -197,22 +173,24 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
 
-        mTextView1.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if(mTextView1.getText().length() > 0) {
-                        setBarcode(mTextView1.getText().toString());
-                    }
-                    return true;
+        mTextView1.setOnKeyListener((view, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                if(mTextView1.getText().length() > 0) {
+                    setBarcode(mTextView1.getText().toString());
+                } else {
+                    requestFocusToBarcode();
                 }
-                return false;
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                if(mTextView1.getText().length() > 0) {
+                    setBarcode(mTextView1.getText().toString());
+                } else {
+                    new Handler().post(mBtnExit::requestFocus);
+                }
             }
+            return true;
         });
 
     }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE) {
@@ -224,20 +202,12 @@ public class MainActivity2 extends AppCompatActivity {
                 mTextView2.setText("");
                 SmallBarcode.setText("");
                 txtTotalAmount.setText("");
-
+                requestFocusToBarcode();
             } else {
                 Toast.makeText(this, "Storage permission is required to store data", Toast.LENGTH_SHORT).show();
             }
         }
     }
-//
-//    private void focusReq(){
-//        if(mTextView1.length()<0){
-//            editTxtAmount.clearFocus();
-//            mTextView1.requestFocus();
-//        }
-//    }
-
 
     private void saveToTxtFile(String barcode, String amount, String mName, String mPrice) {
 
@@ -320,17 +290,13 @@ public class MainActivity2 extends AppCompatActivity {
                     mTextView1.setText(new String(mScanResult.value));
                     barcode = new String(mScanResult.value).trim();
                     setBarcode(barcode);
-                    mTextView1.clearFocus();
-                    editTxtAmount.requestFocus();
+//                    mTextView1.clearFocus();
+//                    editTxtAmount.requestFocus();
                 } else {
                     mTextView1.setText("");
                     SmallBarcode.setText("");
-                    editTxtAmount.clearFocus();
-                    mTextView1.requestFocus();
 
                 }
-                editTxtAmount.clearFocus();
-                mTextView1.requestFocus();
             }
         }
     }
@@ -346,11 +312,12 @@ public class MainActivity2 extends AppCompatActivity {
             SmallBarcode.setText(barcode.substring(barcode.length() - 4));
         }
 
+
         boolean wasBound = fillByBarcode(barcode);
         if (wasBound) {
             fillDefaultQuantity("1");
             fillTotalAmount(barcode);
-            nameDecode();
+
         } else {
             tvNextLine.setText("------------");
             mTextView2.setText("------------");
@@ -372,21 +339,11 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    private void nameDecode(){
-        try {           //декодировкап
-            //byte[] data = Base64.decode(String.valueOf(tvNextLine),  Base64.DEFAULT);
-            URLDecoder.decode(String.valueOf(tvNextLine),"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void fillDefaultQuantity(String quantity) {
         editTxtAmount.setText(quantity);
         editTxtAmount.setSelection(0, editTxtAmount.getText().length());
-        editTxtAmount.clearFocus();
-        mTextView1.requestFocus();
-
+        requestFocusToAmount();
     }
 
 
@@ -404,18 +361,7 @@ public class MainActivity2 extends AppCompatActivity {
 
 
     private void fillTotalAmount(String barcode) {
-//        File file = SessionInfo.getDatFile();
-//        try {
-//            int totalAmount = Files.readAllLines(file.toPath()).
-//                    stream().
-//                    map(StockRecord::new).
-//                    filter(stockRecord -> stockRecord.getBarcode().equals(barcode)).
-//                    mapToInt(StockRecord::getQuantity).
-//                    sum();
-//            txtTotalAmount.setText(String.valueOf(totalAmount));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
         txtTotalAmount.setText(String.valueOf(SessionInfo.getStockTotalAmount(barcode)));
     }
 
@@ -447,38 +393,67 @@ public class MainActivity2 extends AppCompatActivity {
             mTextView2.setText("");
             SmallBarcode.setText("");
             txtTotalAmount.setText("");
-            mTextView1.requestFocus();
+            requestFocusToBarcode();
             return true;
         }
 
         return true;
     }
 
-    private void editLast() {
+    private void requestFocusToBarcode() {
+//        editTxtAmount.post(() -> {
+//            editTxtAmount.clearFocus();
+//            editTxtAmount.post(() -> mTextView1.requestFocus());
+//        });
 
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
-            long length = randomAccessFile.length() - 1;
-            byte b;
-            do {
-                length -= 1;
-                randomAccessFile.seek(length);
-                b = randomAccessFile.readByte();
-            } while (b != 10 && length > 0);
-            String lastLine = randomAccessFile.readLine();
-            if (lastLine != null) {
-                Toast.makeText(this, "Last is " + lastLine.split(" ")[0], Toast.LENGTH_LONG).show();
-                StockRecord lastRecord = new StockRecord(lastLine);
-                mTextView1.setText(lastRecord.getBarcode());
-                fillByBarcode(lastRecord.getBarcode());
-                editTxtAmount.setText(String.valueOf(lastRecord.getQuantity()));
-            }
-            if (length == 0) {
-                lastRecordStart = length;
-            } else {
-                lastRecordStart = length + 1;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        editTxtAmount.post(() -> mTextView1.requestFocus());
+        final Handler handler = new Handler();
+        handler.post(
+                () -> {
+                    editTxtAmount.clearFocus();
+                    editTxtAmount.post(() -> mTextView1.requestFocus());
+                }
+        );
     }
+
+    private void requestFocusToAmount() {
+//        mTextView1.post(() -> {
+//            mTextView1.clearFocus();
+//            mTextView1.post(() -> editTxtAmount.requestFocus());
+//        });
+//        editTxtAmount.post(() -> editTxtAmount.requestFocus());
+        final Handler handler = new Handler();
+        handler.post(() -> {
+            mTextView1.clearFocus();
+            mTextView1.post(() -> editTxtAmount.requestFocus());
+        });
+    }
+
+//    private void editLast() {
+//
+//        try (RandomAccessFile randomAccessFile = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
+//            long length = randomAccessFile.length() - 1;
+//            byte b;
+//            do {
+//                length -= 1;
+//                randomAccessFile.seek(length);
+//                b = randomAccessFile.readByte();
+//            } while (b != 10 && length > 0);
+//            String lastLine = randomAccessFile.readLine();
+//            if (lastLine != null) {
+//                Toast.makeText(this, "Last is " + lastLine.split(" ")[0], Toast.LENGTH_LONG).show();
+//                StockRecord lastRecord = new StockRecord(lastLine);
+//                mTextView1.setText(lastRecord.getBarcode());
+//                fillByBarcode(lastRecord.getBarcode());
+//                editTxtAmount.setText(String.valueOf(lastRecord.getQuantity()));
+//            }
+//            if (length == 0) {
+//                lastRecordStart = length;
+//            } else {
+//                lastRecordStart = length + 1;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

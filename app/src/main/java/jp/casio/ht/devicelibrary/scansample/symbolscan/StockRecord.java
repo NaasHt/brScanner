@@ -28,6 +28,11 @@ class StockRecord {
     }
 
     public String getName() {
+//        try {
+//            URLDecoder.decode(name.toString(), "775");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
         return name;
     }
 
