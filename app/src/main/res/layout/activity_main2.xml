@@ -16,6 +16,7 @@
         android:layout_height="22dp"
         android:background="@android:color/darker_gray"
         android:inputType="number"
+        android:digits="0123456789"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"

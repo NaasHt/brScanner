@@ -120,6 +120,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                 builder.create().show();
             }
+
         });
 
 
@@ -172,23 +173,40 @@ public class MainActivity2 extends AppCompatActivity {
 
         });
 
+        mTextView1.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-        mTextView1.setOnKeyListener((view, keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                if(mTextView1.getText().length() > 0) {
-                    setBarcode(mTextView1.getText().toString());
-                } else {
-                    requestFocusToBarcode();
+                if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
+                    if(mTextView1.getText().length()==0){
+                        mBtnExit.requestFocus();
+                    }
+
                 }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                if(mTextView1.getText().length() > 0) {
+                if(mTextView1.getText().length()>0 && keyCode == KeyEvent.KEYCODE_ENTER){
                     setBarcode(mTextView1.getText().toString());
-                } else {
-                    new Handler().post(mBtnExit::requestFocus);
                 }
+                return false;
             }
-            return true;
         });
+
+
+//        mTextView1.setOnKeyListener((view, keyCode, event) -> {
+//            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+//                if(mTextView1.getText().length() > 0) {
+//                    setBarcode(mTextView1.getText().toString());
+//                } else {
+//                    requestFocusToBarcode();
+//                }
+//            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+//                if(mTextView1.getText().length() > 0) {
+//                    setBarcode(mTextView1.getText().toString());
+//                } else {
+//                    new Handler().post(mBtnExit::requestFocus);
+//                }
+//            }
+//            return true;
+//        });
 
     }
     @Override

@@ -157,13 +157,16 @@ public class MainActivity3 extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if(txtLogin.length()<0){
+                    if(txtLogin.length()==0){
                         builder = new AlertDialog.Builder(MainActivity3.this);
                         builder.setTitle("Alert")
                                 .setMessage("Please enter anything!")
                                 .setCancelable(true)
                                 .setPositiveButton("Yes", null);
                         builder.create().show();
+                    }
+                    else {
+                        ChangeActivity8();
                     }
                     try{
                         SessionInfo.setUserName(txtLogin.getText().toString()); //user login
@@ -216,9 +219,7 @@ public class MainActivity3 extends AppCompatActivity {
                             }
 
 
-                            else {
-                                ChangeActivity8();
-                            }
+
                         }
                         } catch (Exception e) {
                             e.printStackTrace();
