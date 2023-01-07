@@ -1,8 +1,6 @@
 package jp.casio.ht.devicelibrary.scansample.symbolscan;
 
 import android.os.Environment;
-import android.widget.TextView;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +28,7 @@ public class SessionInfo {
     public static String filePath;
     public static File getDatFile() {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        String fileName = "term001"+".dat";
+        String fileName = "term"+ userName + ".txt";
         return new File(path, fileName);
     }
 
@@ -57,7 +54,7 @@ public class SessionInfo {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sdFile), Charset.forName("cp1252")));
 //            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sdFile), StandardCharsets.UTF_8));
-            String line = null;
+            String line;
             //try {
             while ((line = reader.readLine()) != null) {
                 try {
@@ -100,7 +97,7 @@ public class SessionInfo {
         File sdPath = getDatFile();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(sdPath));
-            String line = null;
+            String line;
             //try {
             while ((line = reader.readLine()) != null) {
                 try {

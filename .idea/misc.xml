@@ -3,20 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_histpry_receiver.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_main.xml" value="0.2265625" />
-        <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_main2.xml" value="0.14010416666666667" />
+        <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_main2.xml" value="0.264" />
         <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_main3.xml" value="0.1390625" />
+        <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_main4.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/Liza/Documents/GitHub/brScanner/app/src/main/res/layout/activity_main_logfile.xml" value="0.13858695652173914" />
         <entry key="..\:/Users/User/AndroidStudioProjects/brScanner/app/src/main/res/layout/activity_main2.xml" value="0.1" />
-        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_histpry_receiver.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_histpry_receiver.xml" value="0.1" />
         <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main2.xml" value="0.1" />
-        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main3.xml" value="0.1" />
+        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main3.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main4.xml" value="0.3880208333333333" />
         <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main_log_file.xml" value="0.33451118963486454" />
-        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main_logfile.xml" value="0.4466666666666667" />
-        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/history_receiver_row.xml" value="0.4930555555555556" />
+        <entry key="..\:/Users/osipo/OneDrive - University of Latvia/Documents/praktika/SymbolScan/SymbolScan/app/src/main/res/layout/activity_main_logfile.xml" value="0.14749893116716545" />
       </map>
     </option>
+  </component>
+  <component name="EntryPointsManager">
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="android.annotation.SuppressLint" />
+    </list>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />

@@ -4,11 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -23,18 +21,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-//import androidx.annotation.NonNull;
-//import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import jp.casio.ht.devicelibrary.ScannerLibrary;
@@ -47,20 +42,16 @@ public class MainActivity2 extends AppCompatActivity {
     String mName;
     String mPrice;
     View datName;
-    ArrayList<String> list;
     AlertDialog.Builder builder;
-    private long lastRecordStart = -1;
-    static final int READ_BLOCK_SIZE = 100;
 
     @SuppressLint("StaticFieldLeak")
     private EditText mTextView1, editTxtAmount;
-    private static TextView tvNextLine, mTextView2, textView19, txtLines, txtAmount, txtTotalAmount;
+    @SuppressLint("StaticFieldLeak")
+    private static TextView tvNextLine, mTextView2, txtLines, txtTotalAmount;
     private static ScannerLibrary mScanLib;
     private static ScannerLibrary.ScanResult mScanResult;
     private static ScanResultReceiver mScanResultReceiver;
-    private Bundle savedInstanceState;
     private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
-    private static final int READ_EXTERNAL_STORAGE_CODE = 1;
     private TextView SmallBarcode;
 
     private static ScannerLibrary getmScanLib() {
@@ -85,12 +76,11 @@ public class MainActivity2 extends AppCompatActivity {
         mScanResultReceiver = new ScanResultReceiver();
         getmScanLib().openScanner();
         datName = findViewById(R.id.textView19);
-        tvNextLine = (TextView) findViewById(R.id.textName);
-        mTextView2 = (TextView) findViewById(R.id.textPrice);
-//        mTextView1 = (TextView) findViewById(R.id.textView1);
-        SmallBarcode = (TextView) findViewById(R.id.txtBarcode2);
-        txtLines = (TextView) findViewById(R.id.txtLines);
-        txtTotalAmount = (TextView) findViewById(R.id.textViewAmount);
+        tvNextLine = findViewById(R.id.textName);
+        mTextView2 =  findViewById(R.id.textPrice);
+        SmallBarcode = findViewById(R.id.txtBarcode2);
+        txtLines = findViewById(R.id.txtLines);
+        txtTotalAmount = findViewById(R.id.textViewAmount);
         TextView Name = findViewById(R.id.textView19);
         Name.setText(SessionInfo.userName);
         requestFocusToBarcode();
@@ -99,121 +89,69 @@ public class MainActivity2 extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Button changeActivityExit = findViewById(R.id.btnExit);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        mBtnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder = new AlertDialog.Builder(MainActivity2.this);
-                builder.setTitle("Alert")
-                        .setMessage("Are you sure to exit")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(MainActivity2.this, MainActivity.class);
-                                startActivity(i);
-                            }
-                        })
-                        .setNegativeButton("No", null);
+        mBtnExit.setOnClickListener(v -> {
+            builder = new AlertDialog.Builder(MainActivity2.this);
+            builder.setTitle("Alert")
+                    .setMessage("Are you sure to exit")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Intent i = new Intent(MainActivity2.this, MainActivity.class);
+                        startActivity(i);
+                    })
+                    .setNegativeButton("No", null);
 
-                builder.create().show();
-            }
-
+            builder.create().show();
         });
 
 
-        mBtnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                mText1 = mTextView1.getText().toString().trim();
-//                mText = editTxtAmount.getText().toString().trim();
-//                mName = tvNextLine.getText().toString().trim();
-//                mPrice = mTextView2.getText().toString().trim();
-//                if (mText1.isEmpty()) {
-//                    Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-//                    if (mText.isEmpty()) {
-//                        Toast.makeText(MainActivity2.this, "Please enter anything", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                }
-//                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                        == PackageManager.PERMISSION_GRANTED) {
-//                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                    requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-//                }
-            }
+        mBtnSave.setOnClickListener(v -> {
+
         });
 
-        editTxtAmount.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    mText1 = mTextView1.getText().toString().trim();
-                    mText = editTxtAmount.getText().toString().trim();
-                    mName = tvNextLine.getText().toString().trim();
-                    mPrice = mTextView2.getText().toString().trim();
-                    if (mText.isEmpty()) {
-                        new Handler().post(mBtnExit::requestFocus);
-                    } else {
-                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                == PackageManager.PERMISSION_GRANTED) {
-                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                            requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
-                        }
+        editTxtAmount.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                mText1 = mTextView1.getText().toString().trim();
+                mText = editTxtAmount.getText().toString().trim();
+                mName = tvNextLine.getText().toString().trim();
+                mPrice = mTextView2.getText().toString().trim();
+                if (mText.isEmpty()) {
+                    new Handler().post(mBtnExit::requestFocus);
+                } else {
+                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permissions, WRITE_EXTERNAL_STORAGE_CODE);
                     }
-                } else if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                    requestFocusToBarcode();
                 }
-                return false;
+            } else if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                requestFocusToBarcode();
             }
-
+            return false;
         });
 
-        mTextView1.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+        mTextView1.setOnKeyListener((v, keyCode, event) -> {
 
-                if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
-                    if(mTextView1.getText().length()==0){
-                        mBtnExit.requestFocus();
-                    }
+            if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
+                if(mTextView1.getText().length()==0){
+                    mBtnExit.requestFocus();
+                }
 
-                }
-                if(mTextView1.getText().length()>0 && keyCode == KeyEvent.KEYCODE_ENTER){
-                    setBarcode(mTextView1.getText().toString());
-                }
-                return false;
             }
+            if(mTextView1.getText().length()>0 && keyCode == KeyEvent.KEYCODE_ENTER){
+                setBarcode(mTextView1.getText().toString());
+            }
+            return false;
         });
 
-
-//        mTextView1.setOnKeyListener((view, keyCode, event) -> {
-//            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-//                if(mTextView1.getText().length() > 0) {
-//                    setBarcode(mTextView1.getText().toString());
-//                } else {
-//                    requestFocusToBarcode();
-//                }
-//            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-//                if(mTextView1.getText().length() > 0) {
-//                    setBarcode(mTextView1.getText().toString());
-//                } else {
-//                    new Handler().post(mBtnExit::requestFocus);
-//                }
-//            }
-//            return true;
-//        });
 
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                saveToTxtFile(mText1, mText, mName, mPrice);
+                saveToTxtFile(mText1, mText);
                 mTextView1.setText("");
                 editTxtAmount.setText("");
                 tvNextLine.setText("");
@@ -227,7 +165,7 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    private void saveToTxtFile(String barcode, String amount, String mName, String mPrice) {
+    private void saveToTxtFile(String barcode, String amount) {
 
         String timeStamp1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis());
         String documentId = "In" + SessionInfo.getUserName();
@@ -243,16 +181,9 @@ public class MainActivity2 extends AppCompatActivity {
             }
             SessionInfo.append(new StockRecord(contestsToAppend));
             //Toast.makeText(MainActivity2.this, "Saved in file", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException fileNotFoundException) {
+        } catch (IOException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
-
-    private void ChangeActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -300,7 +231,7 @@ public class MainActivity2 extends AppCompatActivity {
                 return;
             }
 
-            String barcode = "";
+            String barcode;
             if (mScanLib != null) {
                 //3. Read barcode
                 getmScanLib().getScanResult(mScanResult);
@@ -308,8 +239,6 @@ public class MainActivity2 extends AppCompatActivity {
                     mTextView1.setText(new String(mScanResult.value));
                     barcode = new String(mScanResult.value).trim();
                     setBarcode(barcode);
-//                    mTextView1.clearFocus();
-//                    editTxtAmount.requestFocus();
                 } else {
                     mTextView1.setText("");
                     SmallBarcode.setText("");
@@ -334,13 +263,10 @@ public class MainActivity2 extends AppCompatActivity {
         boolean wasBound = fillByBarcode(barcode);
         if (wasBound) {
             fillDefaultQuantity("1");
-            fillTotalAmount(barcode);
 
         } else {
             tvNextLine.setText("------------");
             mTextView2.setText("------------");
-            final MediaPlayer noName = MediaPlayer.create(this, R.raw.scansuccess2);
-            noName.start();
             if (barcode.startsWith("23")) {
                 double weight = Integer.parseInt(barcode.substring(8, 12)) / 1000.0;
                 fillDefaultQuantity((String.valueOf(weight)));
@@ -353,8 +279,8 @@ public class MainActivity2 extends AppCompatActivity {
             } else {
                 fillDefaultQuantity("1");
             }
-            fillTotalAmount(barcode);
         }
+        fillTotalAmount(barcode);
     }
 
 
@@ -413,18 +339,16 @@ public class MainActivity2 extends AppCompatActivity {
             txtTotalAmount.setText("");
             requestFocusToBarcode();
             return true;
+        }else if (KeyEvent.KEYCODE_F4 == keyCode) {
+            editLast();
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private void requestFocusToBarcode() {
-//        editTxtAmount.post(() -> {
-//            editTxtAmount.clearFocus();
-//            editTxtAmount.post(() -> mTextView1.requestFocus());
-//        });
 
-//        editTxtAmount.post(() -> mTextView1.requestFocus());
         final Handler handler = new Handler();
         handler.post(
                 () -> {
@@ -435,11 +359,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void requestFocusToAmount() {
-//        mTextView1.post(() -> {
-//            mTextView1.clearFocus();
-//            mTextView1.post(() -> editTxtAmount.requestFocus());
-//        });
-//        editTxtAmount.post(() -> editTxtAmount.requestFocus());
+
         final Handler handler = new Handler();
         handler.post(() -> {
             mTextView1.clearFocus();
@@ -447,31 +367,32 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-//    private void editLast() {
-//
-//        try (RandomAccessFile randomAccessFile = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
-//            long length = randomAccessFile.length() - 1;
-//            byte b;
-//            do {
-//                length -= 1;
-//                randomAccessFile.seek(length);
-//                b = randomAccessFile.readByte();
-//            } while (b != 10 && length > 0);
-//            String lastLine = randomAccessFile.readLine();
-//            if (lastLine != null) {
-//                Toast.makeText(this, "Last is " + lastLine.split(" ")[0], Toast.LENGTH_LONG).show();
-//                StockRecord lastRecord = new StockRecord(lastLine);
-//                mTextView1.setText(lastRecord.getBarcode());
-//                fillByBarcode(lastRecord.getBarcode());
-//                editTxtAmount.setText(String.valueOf(lastRecord.getQuantity()));
-//            }
-//            if (length == 0) {
-//                lastRecordStart = length;
-//            } else {
-//                lastRecordStart = length + 1;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void editLast() {
+
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(SessionInfo.getDatFile(), "r")) {
+            long length = randomAccessFile.length() - 1;
+            byte b;
+            do {
+                length -= 1;
+                randomAccessFile.seek(length);
+                b = randomAccessFile.readByte();
+            } while (b != 10 && length > 0);
+            String lastLine = randomAccessFile.readLine();
+            if (lastLine != null) {
+                Toast.makeText(this, "Last is " + lastLine.split(" ")[0], Toast.LENGTH_LONG).show();
+                StockRecord lastRecord = new StockRecord(lastLine);
+                mTextView1.setText(lastRecord.getBarcode());
+                fillByBarcode(lastRecord.getBarcode());
+                editTxtAmount.setText(String.valueOf(lastRecord.getQuantity()));
+            }
+            long lastRecordStart = -1;
+            if (length == 0) {
+                lastRecordStart = length;
+            } else {
+                lastRecordStart = length + 1;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

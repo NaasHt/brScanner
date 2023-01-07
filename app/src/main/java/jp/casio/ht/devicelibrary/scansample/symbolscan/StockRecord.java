@@ -10,16 +10,6 @@ class StockRecord {
         this.barcode = record[1].trim();
         this.name = null;
         this.quantity = Integer.parseInt(record[2].trim());
-//        String[] record = line.split("\\s{2,40}+(,)");
-//        if (record.length > 3) { //with name
-//            this.barcode = record[0];
-//            this.name = record[1];
-//            this.quantity = Integer.parseInt(record[2]);
-//        } else {
-//            this.barcode = record[0];
-//            this.name = null;
-//            this.quantity = Integer.parseInt(record[1]);
-//        }
     }
 
 
@@ -28,19 +18,11 @@ class StockRecord {
     }
 
     public String getName() {
-//        try {
-//            URLDecoder.decode(name.toString(), "775");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
         return name;
     }
 
-    public String getBarcodeAndName() {
-        return barcode + " " + name;
-    }
-
     public int getQuantity() {
+
         return quantity;
     }
 }
